@@ -28,7 +28,7 @@ public class Order {
     @Column(nullable = false)
     private Date term;
 
-    @Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Date orderDate;
     @Column(nullable = false)
     private Long fine;

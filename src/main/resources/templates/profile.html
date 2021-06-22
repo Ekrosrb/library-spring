@@ -1,10 +1,185 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
 <head>
   <title>Getting Started: Serving Web Content</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
-<body>
-    Hello login user!
+<body style="background-color: rgb(225,225,225)">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">Library</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/">Home</a>
+                </li>
+                <th:block sec:authorize="isAuthenticated()">
+                    <li class="nav-item">
+                        <form method="post" action="/auth/logout">
+                            <button class="nav-link active" role="button" aria-current="page" type="submit" style="background-color: transparent; border: none; cursor:pointer;">Logout</button>
+                        </form>
+                    </li>
+                </th:block>
+            </ul>
+        </div>
+        <div class="nav-item">
+            <div sec:authorize="hasAuthority('ADMIN')">
+                <form method="post" action="/admin">
+                    <button class="nav-link active text-light" role="button" aria-current="page" type="submit" style="background-color: transparent; border: none; cursor:pointer;">Admin panel</button>
+                </form>
+            </div>
+            <div sec:authorize="hasAuthority('LIBRARIAN') || hasAuthority('ADMIN')">
+                <form method="post" action="/librarian">
+                    <input type="hidden" name="type" value="PENDING"/>
+                    <button class="nav-link active text-light" role="button" aria-current="page" type="submit" style="background-color: transparent; border: none; cursor:pointer;">Librarian panel</button>
+                </form>
+                <div/>
+        </div>
+            <div class="dropdown">
+                <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Language
+                </button>>
+                <form action="/locale" method="post">
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <input type="submit" class="dropdown-item" name="locale" value="en">
+                        <input type="submit" class="dropdown-item" name="locale" value="ru">
+                    </div>
+                </form>
+            </div>
+    </div>
+    </div>
+</nav>
+<th:block th:if="${order}">
+
+    <div class="modal fade" id="orderInfo" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="orderInfoLabel" aria-hidden="true" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="orderInfoLabel">Order</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="1bookName" class="form-label text-dark">Title</label>
+                        <input class="form-control border border-dark rounded" id="1bookName" name="bookName" th:value="${order.getBook().getName()}" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label for="1term" class="form-label text-dark">Term</label>
+                        <input class="form-control border border-dark rounded" type="date" id="1term" name = "term" th:value="${order.getTerm()}" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label for="1date" class="form-label text-dark">Date</label>
+                        <input class="form-control border border-dark rounded" type="date" id="1date" name = "date" th:value="${order.getOrderDate()}" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label for="1status" class="form-label text-dark">Status</label>
+                        <input class="form-control border border-dark rounded" id="1status" name = "status" th:value="${order.getStatus()}" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label for="1fine" class="form-label text-dark">Fine</label>
+                        <input class="form-control border border-dark rounded" id="1fine" name = "fine" th:value="${order.getFine()}" disabled>
+                    </div>
+                    <div class="d-flex justify-content-start">
+                        <th:block th:if="${order.getStatus().name() == 'EXPIRED'}">
+                            <form method="post" th:action="@{/order/pay}">
+                                <input type="hidden" name="id" value="${requestScope.order.id}"/>
+                                <button type="submit" class="btn btn-outline-primary" style="margin: 2px">Pay</button>
+                            </form>
+                        </th:block>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+<div style="margin-left: 20%; margin-right: 20%; padding: 5%">
+    <div class="mb-3 ">
+        <label for="firstName" class="form-label text-dark">First name</label>
+        <input class="form-control border border-dark rounded" id="firstName" name = "firstName" aria-describedby="first name" value="${sessionScope.firstName}" disabled>
+    </div>
+    <div class="mb-3">
+        <label for="lastName" class="form-label text-dark">Last name</label>
+        <input class="form-control border border-dark rounded" id="lastName" name = "lastName" aria-describedby="last name" value="${sessionScope.lastName}" disabled>
+    </div>
+
+    <div class="mb-3">
+        <label for="email" class="form-label text-dark">Email</label>
+        <input type="email" class="form-control border border-dark rounded" id="email" name = "email" aria-describedby="emailHelp" value="${sessionScope.email}" disabled>
+    </div>
+
+    <div class="mb-3">
+        <label for="birthday" class="form-label text-dark">Birthday</label>
+        <input class="form-control border border-dark rounded" type="date" id="birthday" name="birthday" aria-describedby="birthday" value="${sessionScope.birthday}" disabled>
+    </div>
+    <div class="mb-3">
+        <label for="phone" class="form-label text-dark">Phone</label>
+        <input class="form-control border border-dark rounded" id="phone" name = "phone" aria-describedby="phone number" value="${sessionScope.phone}" disabled>
+    </div>
+
+<!--    <%@ include file="WEB-INF/jspf/content/profilePagination.jspf"%>-->
+    <div>
+        <h3>Your orders</h3>
+        <ul class="list-group border rounded">
+
+                <div th:if="${orderList.size() > 0}">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Term</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Action</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <th:block th:each="orderItem : ${orderList}">
+                                <tr class="table-success">
+                                    <th scope="row" th:text="${orderItem.id}"></th>
+                                    <td th:text="${orderItem.term}"></td>
+                                    <td th:text="${orderItem.status.name()}">
+                                    </td>
+                                    <td class="d-flex justify-content-end">
+                                        <th:block th:if="${orderItem.status.name == 'EXPIRED'}">
+                                            <form method="post" th:action="@{/order/pay}">
+                                                <input type="hidden" name="id" value="${order.id}"/>
+                                                <button type="submit" class="btn btn-outline-primary" style="margin: 2px">Pay</button>
+                                            </form>
+                                        </th:block>
+                                        <form method="get" th:action="@{/order/} + ${order.id}">
+                                            <button type="submit" class="btn btn-outline-primary" style="margin: 2px">View</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                        </th:block>
+                        </tbody>
+                    </table>
+                </div>
+                <div th:unless="${orderList.size() > 0}">
+                    <p>You haven't orders ;)</p>
+                </div>
+        </ul>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+
+<!--<%@ include file="WEB-INF/jspf/footer.jspf"%>-->
+<script>
+    $(document).ready(function(){
+        $("#orderInfo").modal('show');
+    });
+</script>
 </body>
 </html>

@@ -9,6 +9,7 @@ import java.util.Collections;
 
 public class LibraryUserDetails implements UserDetails {
 
+    private final Long id;
     private final String email;
     private final String password;
     private final Role role;
@@ -17,11 +18,16 @@ public class LibraryUserDetails implements UserDetails {
         this.email = user.getEmail();
         this.password = user.getPassword();
         this.role = user.getRole();
+        this.id = user.getId();
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(new SimpleGrantedAuthority(role.name()));
+    }
+
+    public Long getId() {
+        return id;
     }
 
     @Override

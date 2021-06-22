@@ -11,16 +11,11 @@ public class LibraryController {
 
     @GetMapping("/profile")
     public String profile(){
-        return "profile";
+        return "redirect:/order";
     }
 
     @GetMapping("/")
     public String index(){
         return "redirect:/book/list";
-    }
-
-    @GetMapping("/login")
-    public String login(){
-        return "login";
     }
 }

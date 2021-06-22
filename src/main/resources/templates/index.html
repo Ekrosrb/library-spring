@@ -3,9 +3,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
 <head>
     <title>Library</title>
-
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body style="background-color: rgb(225,225,225)">
@@ -27,7 +25,7 @@
                             </form>
                         </li>
                         <li class="nav-item">
-                            <form method="post" action="/profile">
+                            <form method="get" th:action="@{/profile}">
                                 <button class="nav-link active" role="button" aria-current="page" type="submit" style="background-color: transparent; border: none; cursor:pointer;">Profile</button>
                             </form>
                         </li>
@@ -275,11 +273,10 @@
                 <p th:text="${book.edition}"></p>
             </div>
             <nav>
-
-                <th:block th:if="${authenticated}">
-                        <div th:if="${book.count > 0}">
-                            <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#orderModal">To order</button>
-                            <div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
+                <div sec:authorize="isAuthenticated()">
+                        <th:block th:if="${book.count > 0}">
+                            <button class="btn btn-primary" type="button" data-toggle="modal" th:attr="data-target='#'+ ${book.id} +'orderModal'">To order</button>
+                            <div class="modal fade" th:id="${book.id} + 'orderModal'" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -288,9 +285,8 @@
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
-                                        <form method="post" action="/order/" style="margin: 3px">
+                                        <form method="post" th:action="@{/order/add}" style="margin: 3px">
                                             <div class="modal-body">
-                                                <input type="hidden" name="userId" th:value="">
                                                 <input type="hidden" name="bookId" th:value="${book.id}">
                                                 <div class="mb-3">
                                                     <label for="term" class="form-label text-light">Term</label>
@@ -306,11 +302,11 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </th:block>
                         <div th:unless="${book.count > 0}">
                             Book is not available.
                         </div>
-                </th:block>
+                </div>
                 <div sec:authorize="hasAuthority('ADMIN')">
                     <!-- Modal edit book -->
                     <button type="button" class="btn btn-outline-primary" data-toggle="modal" th:attr="data-target='#' + ${book.id} + 'editBookModal'" style="margin: 3px">
