@@ -1,0 +1,442 @@
+
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<head>
+    <title>Library</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body style="background-color: rgb(225,225,225)">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">Library</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/">Home</a>
+                </li>
+                <th:block sec:authorize="isAuthenticated()">
+                        <li class="nav-item">
+                            <form method="post" th:action="@{/auth/logout}">
+                                <button class="nav-link active" role="button" aria-current="page" type="submit" style="background-color: transparent; border: none; cursor:pointer;">Logout</button>
+                            </form>
+                        </li>
+                        <li class="nav-item">
+                            <form method="post" action="/profile">
+                                <button class="nav-link active" role="button" aria-current="page" type="submit" style="background-color: transparent; border: none; cursor:pointer;">Profile</button>
+                            </form>
+                        </li>
+                    </th:block>
+                <th:block sec:authorize="isAnonymous()">
+                        <li class="nav-item">
+                            <div class="dropdown">
+                                <a class="nav-link active" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Log In
+                                </a>
+
+                                <div class="dropdown-menu bg-dark" aria-labelledby="dropdownMenuLink" style="border-radius: 20px">
+                                    <div class=" dropdown-item d-flex justify-content-center bg-dark" style=" border-radius: 20px">
+                                        <form method="post" action="/auth/login">
+                                            <div class="mb-3">
+                                                <label for="exampleInputEmail1" class="form-label text-light">Email</label>
+                                                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="username">
+                                                <div id="emailHelp" class="form-text text-muted">We don't tell anyone your password!</div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="exampleInputPassword1" class="form-label text-light" >Password</label>
+                                                <input type="password" class="form-control" id="exampleInputPassword1" name="password">
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Log In</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <div class="dropdown">
+                                <a class="nav-link active" href="#" role="button" id="dropdownMenuLink1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Sign In
+                                </a>
+
+                                <div class="dropdown-menu bg-dark" aria-labelledby="dropdownMenuLink1" style="border-radius: 20px">
+                                    <div class=" dropdown-item d-flex justify-content-center bg-dark" style=" border-radius: 20px">
+                                        <form method="post" action="#" th:action="@{/auth/signin}">
+                                            <div class="mb-3">
+                                                <label for="firstName" class="form-label text-light">First name</label>
+                                                <input class="form-control" id="firstName" name = "firstName" aria-describedby="first name">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="lastName" class="form-label text-light">Last name</label>
+                                                <input class="form-control" id="lastName" name = "lastName" aria-describedby="last name">
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="email" class="form-label text-light">Email</label>
+                                                <input type="email" class="form-control" id="email" name = "email" aria-describedby="emailHelp">
+                                                <div id="emailHelp1" class="form-text  text-muted">We don't tell anyone your password!</div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="password" class="form-label text-light">Password</label>
+                                                <input type="password" class="form-control" id="password" name="password">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="confirm_password" class="form-label text-light">Repeat password</label>
+                                                <input type="password" class="form-control" id="confirm_password" name="confirm_password">
+                                            </div>
+                                            <script>
+                                                let password = document.getElementById("password")
+                                                    , confirm_password = document.getElementById("confirm_password");
+
+                                                function validatePassword(){
+                                                    if(password.value !== confirm_password.value) {
+                                                        confirm_password.setCustomValidity("Passwords Don't Match");
+                                                    } else {
+                                                        confirm_password.setCustomValidity('');
+                                                    }
+                                                }
+                                                password.onchange = validatePassword;
+                                                confirm_password.onkeyup = validatePassword;
+                                            </script>
+
+                                            <div class="mb-3">
+                                                <label for="birthday" class="form-label text-light">Birthday</label>
+                                                <input class="form-control" type="date" value="2000-01-01" id="birthday" name="birthday" aria-describedby="birthday">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="phone" class="form-label text-light">Phone</label>
+                                                <input class="form-control" id="phone" name = "phone" aria-describedby="phone number">
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Sign In</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                </th:block>
+            </ul>
+            <div class="d-flex justify-content-center mx-auto">
+                <form class="form-inline dropdown" method="get" th:action="@{book/list}" style="margin-right: 15px">
+                    <input type="hidden" name="search" th:value="${search}">
+                    <button type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:text="${orderBy}">
+                    </button>
+                    <div class="dropdown-menu">
+                        <input class="dropdown-item" type="submit" name="orderBy" value="name"/>
+                        <input class="dropdown-item" type="submit" name="orderBy" value="author"/>
+                        <input class="dropdown-item" type="submit" name="orderBy" value="edition"/>
+                    </div>
+                </form>
+                <form class="form-inline" method="get" th:action="@{/book/list}">
+                    <input name="from" type="hidden" value="0">
+                    <input name="orderBy" type="hidden"  th:value="${orderBy}"/>
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search" th:value="${search}"/>
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+                <div sec:authorize="hasAuthority('ADMIN')">
+                    <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#addBookModal" style="margin-left: 25px">
+                        Add book
+                    </button>
+
+                    <div class="modal fade" id="addBookModal" tabindex="-1" aria-labelledby="addBookModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="addBookModalLabel">Add book</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <form method="post" action="/book/add">
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            <label for="nameAddModal" class="form-label text-dark">Name</label>
+                                            <input class="form-control border border-dark rounded" type="text" id="nameAddModal" name = "name"/>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="authorAddModal" class="form-label text-dark">Author</label>
+                                            <input class="form-control border border-dark rounded" type="text" id="authorAddModal" name = "author"/>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="editionAddModal" class="form-label text-dark">Edition</label>
+                                            <input class="form-control border border-dark rounded" type="text" id="editionAddModal" name = "edition"/>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="descriptionAddModal" class="form-label text-dark">Description en</label>
+                                            <textarea class="form-control border border-dark rounded" type="text" id="descriptionAddModal" name = "description"></textarea>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="descriptionRuAddModal" class="form-label text-dark">Description ru</label>
+                                            <textarea class="form-control border border-dark rounded" type="text" id="descriptionRuAddModal" name = "descriptionRu"></textarea>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="countAddModal" class="form-label text-dark">Count</label>
+                                            <input class="form-control border border-dark rounded" type="text" id="countAddModal" name = "count"/>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Add</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-item">
+                <div sec:authorize="hasAuthority('ADMIN')">
+                    <form method="post" action="/admin">
+                        <button class="nav-link active text-light" role="button" aria-current="page" type="submit" style="background-color: transparent; border: none; cursor:pointer;">Admin panel</button>
+                    </form>
+                </div>
+                <div sec:authorize="hasAuthority('LIBRARIAN') || hasAuthority('ADMIN')">
+                    <form method="post" action="/librarian">
+                        <input type="hidden" name="type" value="PENDING"/>
+                        <button class="nav-link active text-light" role="button" aria-current="page" type="submit" style="background-color: transparent; border: none; cursor:pointer;">Librarian panel</button>
+                    </form>
+                <div/>
+            </div>
+        </div>
+            <div class="dropdown">
+                <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Language
+                </button>>
+                <form action="/locale" method="post">
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <input type="submit" class="dropdown-item" name="locale" value="en">
+                        <input type="submit" class="dropdown-item" name="locale" value="ru">
+                    </div>
+                </form>
+            </div>
+    </div>
+    </div>
+</nav>
+
+<div class="alert alert-danger" role="alert" th:if="${param.message}">
+    <div th:text="${param.message}"></div>
+</div>
+<div class="d-flex justify-content-center" style="margin-top: 20px">
+    <ul class="pagination">
+        <li th:if="${from > 0}" class="page-item">
+            <form method="get" action="/book/list">
+                <input type="hidden" name="from" th:value="${from - 20}"/>
+                <input type="hidden" name="search" th:value="${search}"/>
+                <input type="hidden" name="orderBy" th:value="${orderBy}"/>
+                <button class="page-link text-light bg-dark" type="submit" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </button>
+            </form>
+        </li>
+        <li th:unless="${from > 0}" class="page-item disabled">
+            <button class="page-link" type="button" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </button>
+        </li>
+
+        <li th:if="${(from+20) < count}" class="page-item">
+            <form method="get" action="/book/list">
+                <input type="hidden" name="from" th:value="${from + 20}"/>
+                <input type="hidden" name="search" th:value="${search}"/>
+                <input type="hidden" name="orderBy" th:value="${orderBy}"/>
+                <button class="page-link text-light bg-dark" type="submit" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </button>
+            </form>
+        </li>
+        <li th:unless="${(from+20) < count}" class="page-item disabled">
+            <button class="page-link" type="button" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </button>
+        </li>
+    </ul>
+</div>
+
+<div class="card-columns" style="margin-left: 10%; margin-right: 10%">
+    <div th:each="book : ${books}" class="card border-dark mb-3">
+        <div class="card-body">
+            <h5 class="card-title" th:text="${book.name}"></h5>
+            <p class="card-text">
+<!--                <c:if test="${empty sessionScope.locale || sessionScope.locale eq 'en'}">-->
+<!--                    ${book.description}-->
+<!--                </c:if>-->
+<!--                <c:if test="${sessionScope.locale eq 'ru'}">-->
+<!--                    ${book.descriptionRu}-->
+<!--                </c:if>-->
+            </p>
+            <div class="card-footer text-muted">
+
+            </div>
+            <div class="card-footer text-muted">
+                <p th:text="${book.author}"></p>
+                <p th:text="${book.edition}"></p>
+            </div>
+            <nav>
+
+                <th:block th:if="${authenticated}">
+                        <div th:if="${book.count > 0}">
+                            <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#orderModal">To order</button>
+                            <div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="orderModalLabel">Order</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <form method="post" action="/order/" style="margin: 3px">
+                                            <div class="modal-body">
+                                                <input type="hidden" name="userId" th:value="">
+                                                <input type="hidden" name="bookId" th:value="${book.id}">
+                                                <div class="mb-3">
+                                                    <label for="term" class="form-label text-light">Term</label>
+                                                    <input class="form-control" type="date" value="2000-01-01" id="term" name="term" aria-describedby="term">
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary">To order</button>
+                                            </div>
+                                        </form>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div th:unless="${book.count > 0}">
+                            Book is not available.
+                        </div>
+                </th:block>
+                <div sec:authorize="hasAuthority('ADMIN')">
+                    <!-- Modal edit book -->
+                    <button type="button" class="btn btn-outline-primary" data-toggle="modal" th:attr="data-target='#' + ${book.id} + 'editBookModal'" style="margin: 3px">
+                        Edit
+                    </button>
+                    <div class="modal fade" th:id="${book.id} + 'editBookModal'" tabindex="-1" aria-labelledby="editBookModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="editBookModalLabel">Edit book</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <form method="post" th:action="@{/book/update/} + ${book.id}">
+                                    <div class="modal-body">
+<!--                                        <input type="hidden" name="search" th:value="${search}"/>-->
+                                        <div class="mb-3">
+                                            <label for="name" class="form-label text-dark">Title</label>
+                                            <input class="form-control" id="name" name="name" aria-describedby="name" th:value="${book.name}">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="author" class="form-label text-dark">Author</label>
+                                            <input class="form-control" id="author" name="author" aria-describedby="author" th:value="${book.author}">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="edition" class="form-label text-dark">Edition</label>
+                                            <input class="form-control" id="edition" name="edition" aria-describedby="edition" th:value="${book.edition}">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="count" class="form-label text-dark">Count</label>
+                                            <input class="form-control" type="number" id="count" name="count" aria-describedby="edition" th:value="${book.count}">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="description">Description</label>
+                                            <textarea class="form-control" id="description" name="description" rows="5" th:text="${book.description}"></textarea>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="descriptionRu">Description ru</label>
+                                            <textarea class="form-control" id="descriptionRu" name="descriptionRu" rows="5" th:text="${book.descriptionRu}"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Edit</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal delete book -->
+                    <button type="button" class="btn btn-outline-danger" data-toggle="modal" th:attr="data-target='#'+${book.id}+'deleteModal'" style="margin: 3px">Delete</button>
+                    <div class="modal fade" th:id="${book.id}+'deleteModal'" id="${book.id}deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="deleteModalLabel">
+                                        Delete book
+                                    </h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    Delete
+                                </div>
+                                <form method="post" th:action="@{/book/delete/} + ${book.id}">
+                                    <input type="hidden" name="id" th:value="${book.id}"/>
+<!--                                    <input type="hidden" name="search" th:value="${search}"/>-->
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                            Close
+                                        </button>
+                                        <button type="submit" class="btn btn-danger">
+                                            Delete
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<div class="d-flex justify-content-center" style="margin-top: 20px">
+    <ul class="pagination">
+        <li th:if="${from > 0}" class="page-item">
+            <form method="get" action="/book/list">
+                <input type="hidden" name="from" th:value="${from - 20}"/>
+                <input type="hidden" name="search" th:value="${search}"/>
+                <input type="hidden" name="orderBy" th:value="${orderBy}"/>
+                <button class="page-link text-light bg-dark" type="submit" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </button>
+            </form>
+        </li>
+        <li th:unless="${from > 0}" class="page-item disabled">
+            <button class="page-link" type="button" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </button>
+        </li>
+
+        <li th:if="${(from+20) < count}" class="page-item">
+            <form method="get" action="/book/list">
+                <input type="hidden" name="from" th:value="${from + 20}"/>
+                <input type="hidden" name="search" th:value="${search}"/>
+                <input type="hidden" name="orderBy" th:value="${orderBy}"/>
+                <button class="page-link text-light bg-dark" type="submit" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </button>
+            </form>
+        </li>
+        <li th:unless="${(from+20) < count}" class="page-item disabled">
+            <button class="page-link" type="button" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </button>
+        </li>
+    </ul>
+</div>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+<!--<%@ include file="WEB-INF/jspf/footer.jspf"%>-->
+</body>
+</html>
