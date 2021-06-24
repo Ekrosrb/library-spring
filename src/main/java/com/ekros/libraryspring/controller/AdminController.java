@@ -1,0 +1,52 @@
+package com.ekros.libraryspring.controller;
+
+import com.ekros.libraryspring.model.dto.UserDto;
+import com.ekros.libraryspring.model.entity.Role;
+import com.ekros.libraryspring.model.entity.User;
+import com.ekros.libraryspring.services.UserService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.sql.Date;
+
+@Controller
+@RequestMapping("/admin")
+public class AdminController {
+
+    private final UserService userService;
+
+    public AdminController(UserService userService) {
+        this.userService = userService;
+    }
+
+    @RequestMapping(method = {RequestMethod.POST, RequestMethod.GET})
+    public String admin(Model model, @RequestParam(required = false) Integer from){
+        if(from == null){
+            from = 0;
+        }
+        model.addAttribute("userList", userService.list(from));
+        model.addAttribute("count", userService.count());
+        model.addAttribute("from", from);
+        return "admin";
+    }
+
+    @PostMapping("/updateUser")
+    public String update(Long id, String firstName, String lastName, Date birthday, String phone, Role role){
+        User user = new User();
+        user.setId(id);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setBirthday(birthday);
+        user.setPhone(phone);
+        user.setRole(role);
+        userService.update(user);
+        return "redirect:/admin";
+    }
+
+    @PostMapping("/deleteUser")
+    public String delete(@RequestParam Long id){
+        userService.delete(id);
+        return "redirect:/admin";
+    }
+}

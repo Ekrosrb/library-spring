@@ -1,6 +1,6 @@
 
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <title>Library</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -131,8 +131,8 @@
                 <form class="form-inline" method="get" th:action="@{/book/list}">
                     <input name="from" type="hidden" value="0">
                     <input name="orderBy" type="hidden"  th:value="${orderBy}"/>
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search" th:value="${search}"/>
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                    <input class="form-control mr-sm-2" type="search" th:attr="placeholder=#{search}" aria-label="Search" name="search" th:value="${search}"/>
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" th:text="#{search}"></button>
                 </form>
                 <div sec:authorize="hasAuthority('ADMIN')">
                     <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#addBookModal" style="margin-left: 25px">
@@ -186,30 +186,10 @@
                 </div>
             </div>
             <div class="nav-item">
-                <div sec:authorize="hasAuthority('ADMIN')">
-                    <form method="post" action="/admin">
-                        <button class="nav-link active text-light" role="button" aria-current="page" type="submit" style="background-color: transparent; border: none; cursor:pointer;">Admin panel</button>
-                    </form>
-                </div>
-                <div sec:authorize="hasAuthority('LIBRARIAN') || hasAuthority('ADMIN')">
-                    <form method="post" action="/librarian">
-                        <input type="hidden" name="type" value="PENDING"/>
-                        <button class="nav-link active text-light" role="button" aria-current="page" type="submit" style="background-color: transparent; border: none; cursor:pointer;">Librarian panel</button>
-                    </form>
-                <div/>
+                <div th:replace="fragments/roleButtons.html :: roleButtons"></div>
             </div>
         </div>
-            <div class="dropdown">
-                <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Language
-                </button>>
-                <form action="/locale" method="post">
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <input type="submit" class="dropdown-item" name="locale" value="en">
-                        <input type="submit" class="dropdown-item" name="locale" value="ru">
-                    </div>
-                </form>
-            </div>
+            <div th:replace="fragments/localization.html :: localization"></div>
     </div>
     </div>
 </nav>
@@ -429,10 +409,6 @@
         </li>
     </ul>
 </div>
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
-<!--<%@ include file="WEB-INF/jspf/footer.jspf"%>-->
+<div th:replace="fragments/mainFooter.html :: mainFooter"></div>
 </body>
 </html>

@@ -1,0 +1,18 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="headerfiles">
+    <title>Library</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+</head>
+<body>
+    <div class="dropdown" th:fragment="localization">
+        <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:text="${param.lang}"></button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a type="submit" class="dropdown-item" href="?lang=en" th:text="#{lang.en}"></a>
+            <a type="submit" class="dropdown-item" href="?lang=ru" th:text="#{lang.ru}"></a>
+        </div>
+    </div>
+</body>
+</html>

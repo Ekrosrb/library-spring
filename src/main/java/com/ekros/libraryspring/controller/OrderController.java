@@ -27,9 +27,9 @@ public class OrderController {
         if(from == null){
             from = 0;
         }
-
         model.addAttribute("order", orderService.order(id));
         model.addAttribute("orderList", orderService.list(from));
+        model.addAttribute("user", userService.toDto(userService.getUser(userId())));
         return "profile";
     }
 
@@ -38,15 +38,14 @@ public class OrderController {
         if(from == null){
             from = 0;
         }
+        model.addAttribute("user", userService.toDto(userService.getUser(userId())));
         model.addAttribute("orderList", orderService.list(from));
         return "profile";
     }
 
     @PostMapping("/add")
     public String create(Long bookId, Date term){
-        Long userId = ((LibraryUserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-                .getId();
-        return "redirect:/order/" + orderService.create(bookId, userId, term).getId();
+        return "redirect:/order/" + orderService.create(bookId, userId(), term).getId();
     }
 
     @PostMapping("/pay")
@@ -56,6 +55,11 @@ public class OrderController {
         }
         model.addAttribute("order", orderService.payFine(id));
         model.addAttribute("orderList", orderService.list(from));
+        model.addAttribute("user", userService.toDto(userService.getUser(userId())));
         return "profile";
+    }
+
+    private Long userId(){
+        return ((LibraryUserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
     }
 }

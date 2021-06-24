@@ -27,30 +27,10 @@
             </ul>
         </div>
         <div class="nav-item">
-            <div sec:authorize="hasAuthority('ADMIN')">
-                <form method="post" action="/admin">
-                    <button class="nav-link active text-light" role="button" aria-current="page" type="submit" style="background-color: transparent; border: none; cursor:pointer;">Admin panel</button>
-                </form>
-            </div>
-            <div sec:authorize="hasAuthority('LIBRARIAN') || hasAuthority('ADMIN')">
-                <form method="post" action="/librarian">
-                    <input type="hidden" name="type" value="PENDING"/>
-                    <button class="nav-link active text-light" role="button" aria-current="page" type="submit" style="background-color: transparent; border: none; cursor:pointer;">Librarian panel</button>
-                </form>
-                <div/>
+            <div th:replace="fragments/roleButtons.html :: roleButtons"></div>
+
         </div>
-            <div class="dropdown">
-                <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Language
-                </button>>
-                <form action="/locale" method="post">
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <input type="submit" class="dropdown-item" name="locale" value="en">
-                        <input type="submit" class="dropdown-item" name="locale" value="ru">
-                    </div>
-                </form>
-            </div>
-    </div>
+        <div th:replace="fragments/localization.html :: localization"></div>
     </div>
 </nav>
 <th:block th:if="${order}">
@@ -104,25 +84,25 @@
 <div style="margin-left: 20%; margin-right: 20%; padding: 5%">
     <div class="mb-3 ">
         <label for="firstName" class="form-label text-dark">First name</label>
-        <input class="form-control border border-dark rounded" id="firstName" name = "firstName" aria-describedby="first name" value="${sessionScope.firstName}" disabled>
+        <input class="form-control border border-dark rounded" id="firstName" name = "firstName" aria-describedby="first name" th:value="${user.firstName}" disabled>
     </div>
     <div class="mb-3">
         <label for="lastName" class="form-label text-dark">Last name</label>
-        <input class="form-control border border-dark rounded" id="lastName" name = "lastName" aria-describedby="last name" value="${sessionScope.lastName}" disabled>
+        <input class="form-control border border-dark rounded" id="lastName" name = "lastName" aria-describedby="last name" th:value="${user.lastName}" disabled>
     </div>
 
     <div class="mb-3">
         <label for="email" class="form-label text-dark">Email</label>
-        <input type="email" class="form-control border border-dark rounded" id="email" name = "email" aria-describedby="emailHelp" value="${sessionScope.email}" disabled>
+        <input type="email" class="form-control border border-dark rounded" id="email" name = "email" aria-describedby="emailHelp" th:value="${user.email}" disabled>
     </div>
 
     <div class="mb-3">
         <label for="birthday" class="form-label text-dark">Birthday</label>
-        <input class="form-control border border-dark rounded" type="date" id="birthday" name="birthday" aria-describedby="birthday" value="${sessionScope.birthday}" disabled>
+        <input class="form-control border border-dark rounded" type="date" id="birthday" name="birthday" aria-describedby="birthday" th:value="${user.birthday}" disabled>
     </div>
     <div class="mb-3">
         <label for="phone" class="form-label text-dark">Phone</label>
-        <input class="form-control border border-dark rounded" id="phone" name = "phone" aria-describedby="phone number" value="${sessionScope.phone}" disabled>
+        <input class="form-control border border-dark rounded" id="phone" name = "phone" aria-describedby="phone number" th:value="${user.phone}" disabled>
     </div>
 
 <!--    <%@ include file="WEB-INF/jspf/content/profilePagination.jspf"%>-->
@@ -142,7 +122,8 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <th:block th:each="orderItem : ${orderList}">
+
+                        <th:block th:if="${orderList.size() > 0}" th:each="orderItem : ${orderList}">
                                 <tr class="table-success">
                                     <th scope="row" th:text="${orderItem.id}"></th>
                                     <td th:text="${orderItem.term}"></td>
@@ -155,7 +136,7 @@
                                                 <button type="submit" class="btn btn-outline-primary" style="margin: 2px">Pay</button>
                                             </form>
                                         </th:block>
-                                        <form method="get" th:action="@{/order/} + ${order.id}">
+                                        <form method="get" th:action="@{/order/} + ${orderItem.id}">
                                             <button type="submit" class="btn btn-outline-primary" style="margin: 2px">View</button>
                                         </form>
                                     </td>
@@ -170,12 +151,8 @@
         </ul>
     </div>
 </div>
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<div th:replace="fragments/mainFooter.html :: mainFooter"></div>
 
-
-<!--<%@ include file="WEB-INF/jspf/footer.jspf"%>-->
 <script>
     $(document).ready(function(){
         $("#orderInfo").modal('show');

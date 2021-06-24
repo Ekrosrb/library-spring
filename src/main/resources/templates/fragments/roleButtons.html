@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="headerfiles">
+    <title>Library</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+</head>
+<body>
+<div th:fragment="roleButtons">
+    <div sec:authorize="hasAuthority('ADMIN')">
+        <form method="post" action="/admin">
+            <button class="nav-link active text-light" role="button" aria-current="page" type="submit" style="background-color: transparent; border: none; cursor:pointer;">Admin panel</button>
+        </form>
+    </div>
+    <div sec:authorize="hasAuthority('LIBRARIAN') || hasAuthority('ADMIN')">
+        <form method="post" action="/librarian">
+            <input type="hidden" name="type" value="PENDING"/>
+            <button class="nav-link active text-light" role="button" aria-current="page" type="submit" style="background-color: transparent; border: none; cursor:pointer;">Librarian panel</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
