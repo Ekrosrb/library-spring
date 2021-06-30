@@ -1,6 +1,7 @@
 package com.ekros.libraryspring.controller;
 
 import com.ekros.libraryspring.model.entity.LibraryUserDetails;
+import com.ekros.libraryspring.model.entity.User;
 import com.ekros.libraryspring.services.OrderService;
 import com.ekros.libraryspring.services.UserService;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,9 +28,10 @@ public class OrderController {
         if(from == null){
             from = 0;
         }
+        User user = userService.getUser(userId());
         model.addAttribute("order", orderService.order(id));
-        model.addAttribute("orderList", orderService.list(from));
-        model.addAttribute("user", userService.toDto(userService.getUser(userId())));
+        model.addAttribute("orderList", user.getOrders());
+        model.addAttribute("user", userService.toDto(user));
         return "profile";
     }
 
@@ -38,8 +40,9 @@ public class OrderController {
         if(from == null){
             from = 0;
         }
-        model.addAttribute("user", userService.toDto(userService.getUser(userId())));
-        model.addAttribute("orderList", orderService.list(from));
+        User user = userService.getUser(userId());
+        model.addAttribute("user", userService.toDto(user));
+        model.addAttribute("orderList", user.getOrders());
         return "profile";
     }
 
@@ -53,9 +56,10 @@ public class OrderController {
         if(from == null){
             from = 0;
         }
+        User user = userService.getUser(userId());
         model.addAttribute("order", orderService.payFine(id));
-        model.addAttribute("orderList", orderService.list(from));
-        model.addAttribute("user", userService.toDto(userService.getUser(userId())));
+        model.addAttribute("orderList", user.getOrders());
+        model.addAttribute("user", userService.toDto(user));
         return "profile";
     }
 

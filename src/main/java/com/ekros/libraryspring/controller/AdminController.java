@@ -1,6 +1,5 @@
 package com.ekros.libraryspring.controller;
 
-import com.ekros.libraryspring.model.dto.UserDto;
 import com.ekros.libraryspring.model.entity.Role;
 import com.ekros.libraryspring.model.entity.User;
 import com.ekros.libraryspring.services.UserService;
@@ -29,6 +28,12 @@ public class AdminController {
         model.addAttribute("count", userService.count());
         model.addAttribute("from", from);
         return "admin";
+    }
+
+    @PostMapping("/block")
+    public String block(Long id, Boolean block){
+        //TODO add block/unblock user
+        return "redirect:/admin";
     }
 
     @PostMapping("/updateUser")

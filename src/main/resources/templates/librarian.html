@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Library</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body style="background-color: rgb(225,225,225)">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/}">Library</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" th:href="@{/}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <form method="post" th:action="@{/auth/logout}">
+                        <button class="nav-link active" role="button" aria-current="page" type="submit" style="background-color: transparent; border: none; cursor:pointer;">Logout</button>
+                    </form>
+                </li>
+                <li class="nav-item">
+                    <form method="get" th:action="@{/profile}">
+                        <button class="nav-link active" role="button" aria-current="page" type="submit" style="background-color: transparent; border: none; cursor:pointer;">Profile</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+        <div class="nav-item">
+            <div th:replace="fragments/roleButtons.html :: roleButtons"></div>
+        </div>
+
+        <div th:replace="fragments/localization.html :: localization"></div>
+    </div>
+</nav>
+
+<div style="margin-left: 20%; margin-right: 20%; padding: 5%">
+    <div class="d-flex justify-content-start dropdown">
+
+        <button type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:text="${type}">
+        </button>
+
+            <div class="dropdown-menu">
+                <form th:action="@{/librarian}" method="post">
+                <input class="dropdown-item" type="submit" name="type" value="PENDING"/>
+                <input class="dropdown-item" type="submit" name="type" value="ACCEPTED"/>
+                <input class="dropdown-item" type="submit" name="type" value="EXPIRED"/>
+                <input class="dropdown-item" type="submit" name="type" value="REJECTED"/>
+                <input class="dropdown-item" type="submit" name="type" value="ON_USE"/>
+                <input class="dropdown-item" type="submit" name="type" value="CLOSED"/>
+                <input class="dropdown-item" type="submit" name="type" value="PAID"/>
+                </form>
+
+                <div class="dropdown-divider"></div>
+                <form th:action="@{/librarian/info}" method="post">
+                <input class="dropdown-item" type="submit" name="type" value="info"/>
+                </form>
+                <form th:action="@{/librarian/userOrders}" method="post">
+                <input class="dropdown-item" type="submit" name="type" value="user"/>
+                </form>
+            </div>
+    </div>
+    <th:block>
+        <th:block th:if="${type == 'info'}">
+            <div class="d-flex justify-content-center" style="margin-top: 15px">
+                <form class="form-inline mx-auto" method="post" th:action="@{/librarian/info}">
+                    <input type="hidden" name="type" th:value="${type}">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="id"/>
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </div>
+            <th:block>
+                <th:block th:if="${orderInfo}">
+                    <div class="mb-3 ">
+                        <label for="userName" class="form-label text-dark">User name</label>
+                        <div class="d-flex justify-content-center">
+                            <input class="form-control border border-dark rounded" id="userName" name = "userName" th:value="${orderInfo.userName}" disabled>
+                            <div class="d-flex justify-content-center">
+                                <form class="form-inline mx-auto" method="post" th:action="@{/librarian/userOrders}">
+                                    <input type="hidden" name="type" value="user"/>
+                                    <input type="hidden" name="id" th:value="${orderInfo.userId}"/>
+                                    <button class="btn btn-outline-primary" type="submit" id="userId" name = "id" style="margin-left: 20px">View</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label text-dark">Email</label>
+                        <input class="form-control border border-dark rounded" type="email" id="email" name = "email" th:value="${orderInfo.email}" disabled>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="phone" class="form-label text-dark">Phone</label>
+                        <input type="number" class="form-control border border-dark rounded" id="phone" name = "phone" th:value="${orderInfo.phone}" disabled>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="bookName" class="form-label text-dark">Book name</label>
+                        <input class="form-control border border-dark rounded" id="bookName" name="bookName" th:value="${orderInfo.bookName}" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label for="term" class="form-label text-dark">Term</label>
+                        <input class="form-control border border-dark rounded" type="date" id="term" name = "term" th:value="${orderInfo.term}" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label for="term" class="form-label text-dark">Order date</label>
+                        <input class="form-control border border-dark rounded" type="date" id="date" name = "date" th:value="${orderInfo.orderDate}" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label for="status" class="form-label text-dark">Status</label>
+                        <input class="form-control border border-dark rounded" id="status" name = "status" th:value="${orderInfo.status}" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label for="fine" class="form-label text-dark">Fine</label>
+                        <input class="form-control border border-dark rounded" id="fine" name = "fine" th:value="${orderInfo.fine}" disabled>
+                    </div>
+                    <div class="d-flex justify-content-start">
+                        <th:block th:if="${orderInfo.status.name() == 'ACCEPTED'}">
+                            <form method="post" th:action="@{/librarian/changeStatus}">
+                                <input type="hidden" name="id" th:value="${orderInfo.id}"/>
+                                <input type="hidden" name="status" value="ON_USE"/>
+                                <input type="hidden" name="type" value="info"/>
+                                <button type="submit" class="btn btn-outline-primary" style="margin: 2px">ON_USE</button>
+                            </form>
+                        </th:block>
+                        <th:block th:if="${orderInfo.status.name() == 'PENDING'}">
+                            <form method="post" th:action="@{/librarian/changeStatus}">
+                                <input type="hidden" name="id" th:value="${orderInfo.id}"/>
+                                <input type="hidden" name="status" value="ACCEPTED"/>
+                                <button type="submit" class="btn btn-outline-success" style="margin: 2px">Accept</button>
+                            </form>
+                            <form method="post" th:action="@{/librarian/changeStatus}">
+                                <input type="hidden" name="id" th:value="${orderInfo.id}"/>
+                                <input type="hidden" name="status" value="REJECTED"/>
+                                <button type="submit" class="btn btn-outline-danger" style="margin: 2px">Discard</button>
+                            </form>
+                        </th:block>
+
+                        <th:block th:if="${orderInfo.status.name() == 'ON_USE' || orderInfo.status.name() == 'PAID'}">
+                            <form method="post" th:action="@{/librarian/changeStatus}">
+                                <input type="hidden" name="id" th:value="${orderInfo.id}"/>
+                                <input type="hidden" name="status" value="CLOSED"/>
+                                <button type="submit" class="btn btn-outline-secondary" style="margin: 2px">CLOSED</button>
+                            </form>
+                            <div>
+                                <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#addFineModal" style="margin: 2px">FINE</button>
+                            </div>
+                            <div class="modal fade" id="addFineModal" data-backdrop="show" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" >
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="staticBackdropLabel">View</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <form method="post" th:action="@{/librarian/addFine}">
+                                            <div class="modal-body">
+                                                <div class="mb-3">
+                                                    <label for="fineModal" class="form-label text-dark">Fine</label>
+                                                    <input class="form-control" id="fineModal" name = "fine" aria-describedby="fine" th:value="${orderInfo.fine}">
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <input type="hidden" name="id" th:value="${orderInfo.id}"/>
+                                                <button type="submit" class="btn btn-outline-primary" style="margin: 2px">Add</button>
+                                                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </th:block>
+                    </div>
+                </th:block>
+                <th:block th:unless="${orderInfo}">
+                    <div class="d-flex justify-content-center" style="margin-top: 20px" th:if="${message}" th:text="${message}">
+                    </div>
+                </th:block>
+            </th:block>
+        </th:block>
+
+                <div th:if="${type == 'user'}" class="d-flex justify-content-center" style="margin-top: 15px">
+                    <form class="form-inline mx-auto" method="post" th:action="@{/librarian/userOrders}">
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="id"/>
+                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                    </form>
+                </div>
+<!--            <%@ include file="/WEB-INF/jspf/content/librarianPagination.jspf"%>-->
+            <div>
+                <h3>Orders list</h3>
+                    <th:block th:if="${orders != null}">
+                        <table class="table table-striped">
+                            <caption>Order list</caption>
+                            <thead>
+                            <tr>
+                                <th scope="col">Id</th>
+                                <th scope="col">Term</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <th:block th:each="order: ${orders}">
+                                <tr>
+                                    <th scope="row" th:text="${order.id}"></th>
+                                    <td th:text="${order.term}"></td>
+                                    <td>
+                                        <div class="d-flex justify-content-end">
+                                                <th:block  th:if="${order.status.name() == 'PENDING'}">
+                                                    <form method="post" th:action="@{/librarian/changeStatus}">
+                                                        <input type="hidden" name="id" th:value="${order.id}"/>
+                                                        <input type="hidden" name="status" value="ACCEPTED"/>
+                                                        <button type="submit" class="btn btn-outline-success" style="margin: 2px">Accept</button>
+                                                    </form>
+                                                    <form method="post" th:action="@{/librarian/changeStatus}">
+                                                        <input type="hidden" name="id" th:value="${order.id}"/>
+                                                        <input type="hidden" name="status" value="REJECTED"/>
+                                                        <button type="submit" class="btn btn-outline-danger" style="margin: 2px">Discard</button>
+                                                    </form>
+                                                </th:block>
+                                            <form method="post" th:action="@{/librarian/info}">
+                                                <input type="hidden" name="type" value="info"/>
+                                                <input type="hidden" name="id" th:value="${order.id}"/>
+                                                <button type="submit" class="btn btn-outline-primary" style="margin: 2px">View</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </th:block>
+                            </tbody>
+                        </table>
+                    </th:block>
+                    <p th:unless="${orders != null}">Orders not found.</p>
+            </div>
+    </th:block>
+</div>
+<div th:replace="fragments/mainFooter.html :: mainFooter"></div>
+</body>
+</html>--

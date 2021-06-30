@@ -172,13 +172,12 @@
 
     <ul class="list-group">
         <th:block th:each="user: ${userList}">
-
             <li class="list-group-item">
                 <span th:text="${user.firstName} + ' ' + ${user.lastName} + ' | ' + ${user.role}"></span>
                 <div class="d-flex justify-content-end">
                     <button type="button" class="btn btn-outline-primary" data-toggle="modal" th:attr="data-target='#' + ${user.id}" style="margin: 3px">Edit</button>
                     <button type="button" class="btn btn-outline-danger" data-toggle="modal" th:attr="data-target='#' + ${user.id} + 'deleteModal'" style="margin: 3px">Delete</button>
-                    <form method="post" th:action="@{/admin/updateUser}">
+                    <form method="post" th:action="@{/admin/block}">
                         <input name="id" type="hidden" th:value="${user.id}">
                         <input name="block" type="hidden" th:value="${not user.block}">
                         <button type="submit" class="btn btn-warning" style="margin: 3px">

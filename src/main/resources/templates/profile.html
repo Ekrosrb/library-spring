@@ -132,7 +132,7 @@
                                     <td class="d-flex justify-content-end">
                                         <th:block th:if="${orderItem.status.name == 'EXPIRED'}">
                                             <form method="post" th:action="@{/order/pay}">
-                                                <input type="hidden" name="id" value="${order.id}"/>
+                                                <input type="hidden" name="id" th:value="${orderItem.id}"/>
                                                 <button type="submit" class="btn btn-outline-primary" style="margin: 2px">Pay</button>
                                             </form>
                                         </th:block>

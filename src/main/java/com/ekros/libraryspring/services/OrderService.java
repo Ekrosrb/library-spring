@@ -2,10 +2,7 @@ package com.ekros.libraryspring.services;
 
 import com.ekros.libraryspring.dao.OrderRepo;
 import com.ekros.libraryspring.model.dto.OrderDto;
-import com.ekros.libraryspring.model.entity.Book;
-import com.ekros.libraryspring.model.entity.Order;
-import com.ekros.libraryspring.model.entity.Status;
-import com.ekros.libraryspring.model.entity.User;
+import com.ekros.libraryspring.model.entity.*;
 import com.ekros.libraryspring.services.interfase.IService;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
@@ -31,9 +28,33 @@ public class OrderService implements IService<Order, OrderDto> {
         return orderRepo.findById(id).orElse(null); //TODO fix null
     }
 
-    public List<Order> list(Integer from){
+    public OrderInfo orderInfo(Long id){
+        Order order = orderRepo.findById(id).get();
+        return toOrderInfo(order);
+    }
+
+    private OrderInfo toOrderInfo(Order order){
+        OrderInfo orderInfo = new OrderInfo();
+        orderInfo.setId(order.getId());
+        orderInfo.setUserId(order.getUser().getId());
+        orderInfo.setBookName(order.getBook().getName());
+        orderInfo.setUserName(order.getUser().getFirstName() + " " + order.getUser().getLastName());
+        orderInfo.setEmail(order.getUser().getEmail());
+        orderInfo.setPhone(order.getUser().getPhone());
+        orderInfo.setTerm(order.getTerm());
+        orderInfo.setOrderDate(order.getOrderDate());
+        orderInfo.setFine(order.getFine());
+        orderInfo.setStatus(order.getStatus());
+        return orderInfo;
+    }
+
+    public List<Order> list(Status status, Integer from){
         Pageable pageable = PageRequest.of(from/20, 20);
-        return orderRepo.findAll(pageable).getContent();
+        return orderRepo.findAllByStatus(status, pageable).getContent();
+    }
+
+    public List<Order> userList(Integer from, Long id){
+        return orderRepo.findAllByUserId(id, PageRequest.of(from/20, 20)).getContent();
     }
 
     public Order create(Long bookId, Long userId, Date term) {
@@ -49,11 +70,31 @@ public class OrderService implements IService<Order, OrderDto> {
     }
 
     @Transactional
+    public OrderInfo changeStatus(Long id, Status status){
+        Order order = orderRepo.findById(id).get();
+        if(status == Status.ON_USE){
+            order.getBook().setCount(order.getBook().getCount()-1);
+        }else if(status == Status.CLOSED){
+            order.getBook().setCount(order.getBook().getCount()+1);
+        }
+        order.setStatus(status);
+        return toOrderInfo(orderRepo.save(order));
+    }
+
+    @Transactional
     public Order payFine(Long id){
-        Order order = orderRepo.getById(id);
+        Order order = orderRepo.findById(id).get();
         order.setFine(0L);
         order.setStatus(Status.PAID);
         return orderRepo.save(order);
+    }
+
+    @Transactional
+    public OrderInfo addFine(Long id, Long fine){
+        Order order = orderRepo.findById(id).get();
+        order.setFine(fine);
+        order.setStatus(Status.EXPIRED);
+        return toOrderInfo(orderRepo.save(order));
     }
 
     @Override
