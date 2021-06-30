@@ -38,6 +38,19 @@ public class UserService implements IService<User, UserDto> {
         return userRepo.save(user);
     }
 
+    public User add(User user){
+        user.setBlock(false);
+        user.setPassword(encoder.encode(user.getPassword()));
+        return userRepo.save(user);
+    }
+
+    @Transactional
+    public User block(Long id, Boolean block){
+        User user = userRepo.getById(id);
+        user.setBlock(block);
+        return userRepo.save(user);
+    }
+
     @Transactional
     public User update(User user){
         User old = userRepo.getById(user.getId());

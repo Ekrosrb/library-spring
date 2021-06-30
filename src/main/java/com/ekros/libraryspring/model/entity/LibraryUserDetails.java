@@ -13,12 +13,14 @@ public class LibraryUserDetails implements UserDetails {
     private final String email;
     private final String password;
     private final Role role;
+    private final Boolean block;
 
     public LibraryUserDetails(User user) {
         this.email = user.getEmail();
         this.password = user.getPassword();
         this.role = user.getRole();
         this.id = user.getId();
+        this.block = user.isBlock();
     }
 
     @Override
@@ -47,7 +49,7 @@ public class LibraryUserDetails implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return !block;
     }
 
     @Override
