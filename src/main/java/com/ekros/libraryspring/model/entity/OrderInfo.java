@@ -14,6 +14,6 @@ public class OrderInfo {
     private String phone;
     private Date term;
     private Date orderDate;
-    private long fine;
+    private Long fine;
     private Status status;
 }

@@ -25,24 +25,14 @@ public class OrderController {
 
     @GetMapping("/{id}")
     public String order(Model model, @PathVariable Long id, @RequestParam(required = false) Integer from){
-        if(from == null){
-            from = 0;
-        }
-        User user = userService.getUser(userId());
+        profileOrderList(model, from);
         model.addAttribute("order", orderService.order(id));
-        model.addAttribute("orderList", user.getOrders());
-        model.addAttribute("user", userService.toDto(user));
         return "profile";
     }
 
     @GetMapping
     public String list(Model model, @RequestParam(required = false) Integer from){
-        if(from == null){
-            from = 0;
-        }
-        User user = userService.getUser(userId());
-        model.addAttribute("user", userService.toDto(user));
-        model.addAttribute("orderList", user.getOrders());
+        profileOrderList(model, from);
         return "profile";
     }
 
@@ -53,14 +43,21 @@ public class OrderController {
 
     @PostMapping("/pay")
     public String pay(Model model, Long id, @RequestParam(required = false) Integer from){
+        profileOrderList(model, from);
+        model.addAttribute("order", orderService.payFine(id));
+
+        return "profile";
+    }
+
+    public void profileOrderList(Model model, Integer from){
         if(from == null){
             from = 0;
         }
         User user = userService.getUser(userId());
-        model.addAttribute("order", orderService.payFine(id));
-        model.addAttribute("orderList", user.getOrders());
         model.addAttribute("user", userService.toDto(user));
-        return "profile";
+        model.addAttribute("orderList", orderService.userList(from, user.getId()));
+        model.addAttribute("from", from);
+        model.addAttribute("count", user.getOrders().size());
     }
 
     private Long userId(){

@@ -104,8 +104,37 @@
         <label for="phone" class="form-label text-dark">Phone</label>
         <input class="form-control border border-dark rounded" id="phone" name = "phone" aria-describedby="phone number" th:value="${user.phone}" disabled>
     </div>
-
-<!--    <%@ include file="WEB-INF/jspf/content/profilePagination.jspf"%>-->
+    <!--  Pagination  -->
+    <div class="d-flex justify-content-start" style="margin-top: 20px">
+        <ul class="pagination">
+            <li th:if="${from} > 0" class="page-item">
+                <form method="post" th:action="@{/order}">
+                    <input type="hidden" name="from" th:value="${from - 20}"/>
+                    <button class="page-link text-light bg-dark" type="submit" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </button>
+                </form>
+            </li>
+            <li th:unless="${from} > 0" class="page-item disabled">
+                <button class="page-link" type="button" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </button>
+            </li>
+            <li th:if="${from + 20} < ${count}" class="page-item">
+                <form method="post" th:action="@{/order}">
+                    <input type="hidden" name="from" th:value="${from + 20}"/>
+                    <button class="page-link text-light bg-dark" type="submit" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </button>
+                </form>
+            </li>
+            <li th:unless="${from + 20} < ${count}" class="page-item disabled">
+                <button class="page-link" type="button" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </button>
+            </li>
+        </ul>
+    </div>
     <div>
         <h3>Your orders</h3>
         <ul class="list-group border rounded">

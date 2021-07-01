@@ -1,7 +1,9 @@
 package com.ekros.libraryspring.controller;
 
+import com.ekros.libraryspring.model.entity.LibraryUserDetails;
 import com.ekros.libraryspring.model.entity.Status;
 import com.ekros.libraryspring.services.OrderService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,6 +34,7 @@ public class LibrarianController {
         model.addAttribute("type", type);
         model.addAttribute("from", from);
         model.addAttribute("orders", orderService.list(Status.valueOf(type), from));
+        model.addAttribute("count", orderService.statusOrdersCount(Status.valueOf(type)));
         return "librarian";
     }
 
@@ -54,6 +57,7 @@ public class LibrarianController {
         }
         model.addAttribute("type", "user");
         model.addAttribute("from", from);
+        model.addAttribute("count", orderService.userOrdersCount(id));
         return "librarian";
     }
 

@@ -11,6 +11,6 @@ import java.util.List;
 public interface BookRepo extends PagingAndSortingRepository<Book, Long> {
     List<Book> findByNameContainingOrAuthorContaining(String name, String author, Pageable pageable);
 
-    @Query(nativeQuery = true, value = "SELECT COUNT(*) FROM books b WHERE b.name = ?1 OR b.author = ?1")
+    @Query(nativeQuery = true, value = "SELECT COUNT(*) FROM books b WHERE b.name LIKE ?1 OR b.author LIKE ?1")
     Long count(String search);
 }

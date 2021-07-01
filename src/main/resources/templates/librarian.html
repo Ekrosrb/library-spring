@@ -190,7 +190,40 @@
                         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                     </form>
                 </div>
-<!--            <%@ include file="/WEB-INF/jspf/content/librarianPagination.jspf"%>-->
+        <!-- pagination -->
+        <div class="d-flex justify-content-start" style="margin-top: 20px">
+            <ul class="pagination">
+                <li th:if="${from} > 0" class="page-item">
+                    <form method="post" th:action="@{/librarian/}">
+                        <input type="hidden" name="from" th:value="${from - 20}"/>
+                        <input type="hidden" name="type" th:value="${type}"/>
+                        <button class="page-link text-light bg-dark" type="submit" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </button>
+                    </form>
+                </li>
+                <li th:unless="${from} > 0" class="page-item disabled">
+                    <button class="page-link" type="button" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </button>
+                </li>
+                <li th:if="${from + 20} < ${count}" class="page-item">
+                    <form method="post" th:action="@{/librarian}">
+                        <input type="hidden" name="from" th:value="${from + 20}"/>
+                        <input type="hidden" name="type" th:value="${type}"/>
+                        <button class="page-link text-light bg-dark" type="submit" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </button>
+                    </form>
+                </li>
+                <li th:unless="${from + 20} < ${count}" class="page-item disabled">
+                    <button class="page-link" type="button" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </button>
+                </li>
+            </ul>
+        </div>
+
             <div>
                 <h3>Orders list</h3>
                     <th:block th:if="${orders != null}">

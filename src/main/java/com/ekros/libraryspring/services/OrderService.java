@@ -30,22 +30,7 @@ public class OrderService implements IService<Order, OrderDto> {
 
     public OrderInfo orderInfo(Long id){
         Order order = orderRepo.findById(id).get();
-        return toOrderInfo(order);
-    }
-
-    private OrderInfo toOrderInfo(Order order){
-        OrderInfo orderInfo = new OrderInfo();
-        orderInfo.setId(order.getId());
-        orderInfo.setUserId(order.getUser().getId());
-        orderInfo.setBookName(order.getBook().getName());
-        orderInfo.setUserName(order.getUser().getFirstName() + " " + order.getUser().getLastName());
-        orderInfo.setEmail(order.getUser().getEmail());
-        orderInfo.setPhone(order.getUser().getPhone());
-        orderInfo.setTerm(order.getTerm());
-        orderInfo.setOrderDate(order.getOrderDate());
-        orderInfo.setFine(order.getFine());
-        orderInfo.setStatus(order.getStatus());
-        return orderInfo;
+        return mapper.map(order, OrderInfo.class);
     }
 
     public List<Order> list(Status status, Integer from){
@@ -57,6 +42,14 @@ public class OrderService implements IService<Order, OrderDto> {
         return orderRepo.findAllByUserId(id, PageRequest.of(from/20, 20)).getContent();
     }
 
+    public Long userOrdersCount(Long id){
+        return orderRepo.count(id);
+    }
+
+    public Long statusOrdersCount(Status status){
+        return orderRepo.count(status.ordinal());
+    }
+
     public Order create(Long bookId, Long userId, Date term) {
         Order order = new Order();
         order.setBook(new Book());
@@ -64,6 +57,7 @@ public class OrderService implements IService<Order, OrderDto> {
         order.getBook().setId(bookId);
         order.getUser().setId(userId);
         order.setTerm(term);
+        order.setOrderDate(new Date(new java.util.Date().getTime()));
         order.setStatus(Status.PENDING);
         order.setFine(0L);
         return orderRepo.save(order);
@@ -78,7 +72,7 @@ public class OrderService implements IService<Order, OrderDto> {
             order.getBook().setCount(order.getBook().getCount()+1);
         }
         order.setStatus(status);
-        return toOrderInfo(orderRepo.save(order));
+        return mapper.map(orderRepo.save(order), OrderInfo.class);
     }
 
     @Transactional
@@ -94,7 +88,7 @@ public class OrderService implements IService<Order, OrderDto> {
         Order order = orderRepo.findById(id).get();
         order.setFine(fine);
         order.setStatus(Status.EXPIRED);
-        return toOrderInfo(orderRepo.save(order));
+        return mapper.map(orderRepo.save(order), OrderInfo.class);
     }
 
     @Override

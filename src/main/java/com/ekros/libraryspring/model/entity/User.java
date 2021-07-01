@@ -37,5 +37,8 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<Order> orders;
 
+    public String getFullName(){
+        return firstName + " " + lastName;
+    }
 
 }

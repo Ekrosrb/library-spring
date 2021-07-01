@@ -50,6 +50,7 @@ public class BookService implements IService<Book, BookDto> {
     }
 
     public Long count(String search){
+        search = "%" + search + "%";
         return bookRepo.count(search);
     }
 

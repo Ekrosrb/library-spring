@@ -199,7 +199,7 @@
 </div>
 <div class="d-flex justify-content-center" style="margin-top: 20px">
     <ul class="pagination">
-        <li th:if="${from > 0}" class="page-item">
+        <li th:if="${from} > 0" class="page-item">
             <form method="get" action="/book/list">
                 <input type="hidden" name="from" th:value="${from - 20}"/>
                 <input type="hidden" name="search" th:value="${search}"/>
@@ -209,13 +209,13 @@
                 </button>
             </form>
         </li>
-        <li th:unless="${from > 0}" class="page-item disabled">
+        <li th:unless="${from} > 0" class="page-item disabled">
             <button class="page-link" type="button" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
             </button>
         </li>
 
-        <li th:if="${(from+20) < count}" class="page-item">
+        <li th:if="${from + 20} < ${count}" class="page-item">
             <form method="get" action="/book/list">
                 <input type="hidden" name="from" th:value="${from + 20}"/>
                 <input type="hidden" name="search" th:value="${search}"/>
@@ -225,7 +225,7 @@
                 </button>
             </form>
         </li>
-        <li th:unless="${(from+20) < count}" class="page-item disabled">
+        <li th:unless="${from + 20} < ${count}" class="page-item disabled">
             <button class="page-link" type="button" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
             </button>
