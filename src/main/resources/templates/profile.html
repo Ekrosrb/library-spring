@@ -1,26 +1,26 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" th:lang="${#locale}">
 <head>
-  <title>Getting Started: Serving Web Content</title>
+  <title th:text="#{library}"></title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body style="background-color: rgb(225,225,225)">
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="/">Library</a>
+        <a class="navbar-brand" th:href="@{/}" th:text="#{library}"></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/">Home</a>
+                    <a class="nav-link active" aria-current="page" th:href="@{/}" th:text="#{home}"></a>
                 </li>
                 <th:block sec:authorize="isAuthenticated()">
                     <li class="nav-item">
-                        <form method="post" action="/auth/logout">
-                            <button class="nav-link active" role="button" aria-current="page" type="submit" style="background-color: transparent; border: none; cursor:pointer;">Logout</button>
+                        <form method="post" th:action="@{/auth/logout}">
+                            <button class="nav-link active" role="button" aria-current="page" type="submit" style="background-color: transparent; border: none; cursor:pointer;" th:text="#{logout}"></button>
                         </form>
                     </li>
                 </th:block>
@@ -46,30 +46,30 @@
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="1bookName" class="form-label text-dark">Title</label>
+                        <label for="1bookName" class="form-label text-dark" th:text="#{form.book.name}"></label>
                         <input class="form-control border border-dark rounded" id="1bookName" name="bookName" th:value="${order.getBook().getName()}" disabled>
                     </div>
                     <div class="mb-3">
-                        <label for="1term" class="form-label text-dark">Term</label>
+                        <label for="1term" class="form-label text-dark" th:text="#{form.book.term}"></label>
                         <input class="form-control border border-dark rounded" type="date" id="1term" name = "term" th:value="${order.getTerm()}" disabled>
                     </div>
                     <div class="mb-3">
-                        <label for="1date" class="form-label text-dark">Date</label>
+                        <label for="1date" class="form-label text-dark" th:text="#{form.order.date}"></label>
                         <input class="form-control border border-dark rounded" type="date" id="1date" name = "date" th:value="${order.getOrderDate()}" disabled>
                     </div>
                     <div class="mb-3">
-                        <label for="1status" class="form-label text-dark">Status</label>
+                        <label for="1status" class="form-label text-dark" th:text="#{form.book.status}"></label>
                         <input class="form-control border border-dark rounded" id="1status" name = "status" th:value="${order.getStatus()}" disabled>
                     </div>
                     <div class="mb-3">
-                        <label for="1fine" class="form-label text-dark">Fine</label>
+                        <label for="1fine" class="form-label text-dark" th:text="#{form.order.fine}"></label>
                         <input class="form-control border border-dark rounded" id="1fine" name = "fine" th:value="${order.getFine()}" disabled>
                     </div>
                     <div class="d-flex justify-content-start">
                         <th:block th:if="${order.getStatus().name() == 'EXPIRED'}">
                             <form method="post" th:action="@{/order/pay}">
-                                <input type="hidden" name="id" value="${requestScope.order.id}"/>
-                                <button type="submit" class="btn btn-outline-primary" style="margin: 2px">Pay</button>
+                                <input type="hidden" name="id" th:value="${order.id}"/>
+                                <button type="submit" class="btn btn-outline-primary" style="margin: 2px" th:text="#{order.pay}"></button>
                             </form>
                         </th:block>
                     </div>
@@ -83,25 +83,25 @@
 
 <div style="margin-left: 20%; margin-right: 20%; padding: 5%">
     <div class="mb-3 ">
-        <label for="firstName" class="form-label text-dark">First name</label>
+        <label for="firstName" class="form-label text-dark" th:text="#{form.first.name}"></label>
         <input class="form-control border border-dark rounded" id="firstName" name = "firstName" aria-describedby="first name" th:value="${user.firstName}" disabled>
     </div>
     <div class="mb-3">
-        <label for="lastName" class="form-label text-dark">Last name</label>
+        <label for="lastName" class="form-label text-dark" th:text="#{form.last.name}"></label>
         <input class="form-control border border-dark rounded" id="lastName" name = "lastName" aria-describedby="last name" th:value="${user.lastName}" disabled>
     </div>
 
     <div class="mb-3">
-        <label for="email" class="form-label text-dark">Email</label>
+        <label for="email" class="form-label text-dark" th:text="#{form.email}"></label>
         <input type="email" class="form-control border border-dark rounded" id="email" name = "email" aria-describedby="emailHelp" th:value="${user.email}" disabled>
     </div>
 
     <div class="mb-3">
-        <label for="birthday" class="form-label text-dark">Birthday</label>
+        <label for="birthday" class="form-label text-dark" th:text="#{form.birhtday}"></label>
         <input class="form-control border border-dark rounded" type="date" id="birthday" name="birthday" aria-describedby="birthday" th:value="${user.birthday}" disabled>
     </div>
     <div class="mb-3">
-        <label for="phone" class="form-label text-dark">Phone</label>
+        <label for="phone" class="form-label text-dark" th:text="#{form.phone}"></label>
         <input class="form-control border border-dark rounded" id="phone" name = "phone" aria-describedby="phone number" th:value="${user.phone}" disabled>
     </div>
     <!--  Pagination  -->
@@ -143,10 +143,10 @@
                     <table class="table table-striped">
                         <thead>
                         <tr>
-                            <th scope="col">Id</th>
-                            <th scope="col">Term</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Action</th>
+                            <th scope="col" th:text="#{order.id}"></th>
+                            <th scope="col" th:text="#{form.book.term}"></th>
+                            <th scope="col" th:text="#{form.book.status}"></th>
+                            <th scope="col" th:text="#{order.action}"></th>
 
                         </tr>
                         </thead>
@@ -162,11 +162,11 @@
                                         <th:block th:if="${orderItem.status.name == 'EXPIRED'}">
                                             <form method="post" th:action="@{/order/pay}">
                                                 <input type="hidden" name="id" th:value="${orderItem.id}"/>
-                                                <button type="submit" class="btn btn-outline-primary" style="margin: 2px">Pay</button>
+                                                <button type="submit" class="btn btn-outline-primary" style="margin: 2px" th:text="#{order.pay}"></button>
                                             </form>
                                         </th:block>
                                         <form method="get" th:action="@{/order/} + ${orderItem.id}">
-                                            <button type="submit" class="btn btn-outline-primary" style="margin: 2px">View</button>
+                                            <button type="submit" class="btn btn-outline-primary" style="margin: 2px" th:text="#{button.view}"></button>
                                         </form>
                                     </td>
                                 </tr>
@@ -175,7 +175,7 @@
                     </table>
                 </div>
                 <div th:unless="${orderList.size() > 0}">
-                    <p>You haven't orders ;)</p>
+                    <p th:text="#{order.not.exist.message}"></p>
                 </div>
         </ul>
     </div>

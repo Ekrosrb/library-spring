@@ -9,14 +9,14 @@
 <body>
 <div th:fragment="roleButtons">
     <div sec:authorize="hasAuthority('ADMIN')">
-        <form method="post" action="/admin">
-            <button class="nav-link active text-light" role="button" aria-current="page" type="submit" style="background-color: transparent; border: none; cursor:pointer;">Admin panel</button>
+        <form method="post" th:action="@{/admin}">
+            <button class="nav-link active text-light" role="button" aria-current="page" type="submit" style="background-color: transparent; border: none; cursor:pointer;" th:text="#{admin.panel}"></button>
         </form>
     </div>
     <div sec:authorize="hasAuthority('LIBRARIAN') || hasAuthority('ADMIN')">
-        <form method="post" action="/librarian">
+        <form method="post" th:action="@{/librarian}">
             <input type="hidden" name="type" value="PENDING"/>
-            <button class="nav-link active text-light" role="button" aria-current="page" type="submit" style="background-color: transparent; border: none; cursor:pointer;">Librarian panel</button>
+            <button class="nav-link active text-light" role="button" aria-current="page" type="submit" style="background-color: transparent; border: none; cursor:pointer;" th:text="#{librarian.panel}"></button>
         </form>
     </div>
 </div>

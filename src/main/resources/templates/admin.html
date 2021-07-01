@@ -1,31 +1,31 @@
 
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" th:lang="${#locale}">
 <head>
-    <title>Library</title>
+    <title th:text="#{library}"></title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body style="background-color: rgb(225,225,225)">
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" th:href="@{/}">Library</a>
+        <a class="navbar-brand" th:href="@{/}" th:text="#{library}"></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" th:href="@{/}">Home</a>
+                    <a class="nav-link active" aria-current="page" th:href="@{/}" th:text="#{home}"></a>
                 </li>
                 <li class="nav-item">
                     <form method="post" th:action="@{/auth/logout}">
-                        <button class="nav-link active" role="button" aria-current="page" type="submit" style="background-color: transparent; border: none; cursor:pointer;">Logout</button>
+                        <button class="nav-link active" role="button" aria-current="page" type="submit" style="background-color: transparent; border: none; cursor:pointer;" th:text="#{logout}"></button>
                     </form>
                 </li>
                 <li class="nav-item">
                     <form method="get" th:action="@{/profile}">
-                        <button class="nav-link active" role="button" aria-current="page" type="submit" style="background-color: transparent; border: none; cursor:pointer;">Profile</button>
+                        <button class="nav-link active" role="button" aria-current="page" type="submit" style="background-color: transparent; border: none; cursor:pointer; " th:text="#{profile}"></button>
                     </form>
                 </li>
             </ul>
@@ -42,21 +42,19 @@
 
     <div class="d-flex justify-content-start" style="margin-top: 15px">
         <form class="form-inline mx-auto" method="post" th:action="@{/admin}">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="id"/>
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            <input class="form-control mr-sm-2" type="search" th:attr="placeholder=#{search}" aria-label="Search" name="id"/>
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit" th:text="#{search}"></button>
         </form>
     </div>
 
     <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addUserModal" style="margin: 3px">
-        Add
-    </button>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addUserModal" style="margin: 3px" th:text="#{button.add}"></button>
     <!-- Modal -->
     <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addUserModalLabel">Title</h5>
+                    <h5 class="modal-title" id="addUserModalLabel" th:text="#{form.book.name}"></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -64,25 +62,25 @@
                 <form method="post" th:action="@{/admin/add}">
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="firstName" class="form-label text-dark">First name</label>
+                            <label for="firstName" class="form-label text-dark" th:text="#{form.first.name}"></label>
                             <input class="form-control" id="firstName" name = "firstName" aria-describedby="first name">
                         </div>
                         <div class="mb-3">
-                            <label for="lastName" class="form-label text-dark">Last name</label>
+                            <label for="lastName" class="form-label text-dark" th:text="#{form.last.name}"></label>
                             <input class="form-control" id="lastName" name = "lastName" aria-describedby="last name">
                         </div>
 
                         <div class="mb-3">
-                            <label for="email" class="form-label text-dark">Email</label>
+                            <label for="email" class="form-label text-dark" th:text="#{form.email}">Email</label>
                             <input type="email" class="form-control" id="email" name = "email" aria-describedby="emailHelp">
-                            <div id="emailHelp1" class="form-text  text-muted">We don't tell your password to anyone!</div>
+                            <div id="emailHelp1" class="form-text  text-muted" th:text="#{form.message}"></div>
                         </div>
                         <div class="mb-3">
-                            <label for="password" class="form-label text-dark">Password</label>
+                            <label for="password" class="form-label text-dark" th:text="#{form.password}"></label>
                             <input type="password" class="form-control" id="password" name="password">
                         </div>
                         <div class="mb-3">
-                            <label for="confirm_password" class="form-label text-dark">Confirm password</label>
+                            <label for="confirm_password" class="form-label text-dark" th:text="#{form.password.confirm}"></label>
                             <input type="password" class="form-control" id="confirm_password" name="confirm_password">
                         </div>
 
@@ -101,15 +99,15 @@
                             confirm_password.onkeyup = validatePassword;
                         </script>
                         <div class="mb-3">
-                            <label for="birthday" class="form-label text-dark">Birthday</label>
+                            <label for="birthday" class="form-label text-dark" th:text="#{form.birhtday}"></label>
                             <input class="form-control" type="date" value="2000-01-01" id="birthday" name="birthday" aria-describedby="birthday">
                         </div>
                         <div class="mb-3">
-                            <label for="phone" class="form-label text-dark">Phone</label>
+                            <label for="phone" class="form-label text-dark" th:text="#{form.phone}"></label>
                             <input class="form-control" id="phone" name = "phone" aria-describedby="phone number">
                         </div>
                         <div class="form-group">
-                            <label for="role">ADMIN</label>
+                            <label for="role">USER</label>
                             <select class="form-control" id="role" name="role">
                                 <option>ADMIN</option>
                                 <option>LIBRARIAN</option>
@@ -119,8 +117,8 @@
 
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Add</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{button.close}"></button>
+                        <button type="submit" class="btn btn-primary" th:text="#{button.add}"></button>
                     </div>
                 </form>
             </div>
@@ -133,7 +131,7 @@
                 <th:block th:if="${from > 0}">
                     <li class="page-item">
                         <form method="post" th:action="@{/admin}">
-                            <input type="hidden" name="from" value="${(requestScope.from) - 20}"/>
+                            <input type="hidden" name="from" th:value="${from - 20}"/>
                             <button class="page-link text-light bg-dark" type="submit" aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                             </button>
@@ -152,7 +150,7 @@
                 <th:block th:if="${(from+20) < count}">
                     <li class="page-item">
                         <form method="post" th:action="@{/admin}">
-                            <input type="hidden" name="from" value="${(requestScope.from) + 20}"/>
+                            <input type="hidden" name="from" th:value="${from + 20}"/>
                             <button class="page-link text-light bg-dark" type="submit" aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
                             </button>
@@ -175,19 +173,15 @@
             <li class="list-group-item">
                 <span th:text="${user.firstName} + ' ' + ${user.lastName} + ' | ' + ${user.role}"></span>
                 <div class="d-flex justify-content-end">
-                    <button type="button" class="btn btn-outline-primary" data-toggle="modal" th:attr="data-target='#' + ${user.id}" style="margin: 3px">Edit</button>
-                    <button type="button" class="btn btn-outline-danger" data-toggle="modal" th:attr="data-target='#' + ${user.id} + 'deleteModal'" style="margin: 3px">Delete</button>
+                    <button type="button" class="btn btn-outline-primary" data-toggle="modal" th:attr="data-target='#' + ${user.id}" style="margin: 3px" th:text="#{button.edit}">Edit</button>
+                    <button type="button" class="btn btn-outline-danger" data-toggle="modal" th:attr="data-target='#' + ${user.id} + 'deleteModal'" style="margin: 3px" th:text="#{button.delete}"></button>
                     <form method="post" th:action="@{/admin/block}">
                         <input name="id" type="hidden" th:value="${user.id}">
                         <input name="block" type="hidden" th:value="${not user.block}">
-                        <button type="submit" class="btn btn-warning" style="margin: 3px">
+                        <button type="submit" class="btn btn-outline-warning" style="margin: 3px">
                             <div>
-                                <div th:if="${user.block}">
-                                    Unblock
-                                </div>
-                                <div th:unless="${user.block}">
-                                    Block
-                                </div>
+                                <div th:if="${user.block}" th:text="#{button.unblock}"></div>
+                                <div th:unless="${user.block}" th:text="#{button.block}"></div>
                             </div>
                         </button>
                     </form>
@@ -203,18 +197,12 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <div class="modal-body">
-                            Are you want to delete this user?
-                        </div>
+                        <div class="modal-body" th:text="#{delete.user.message}"></div>
                         <form method="post" th:action="@{/admin/deleteUser}">
                             <input type="hidden" name="id" th:value="${user.id}"/>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                                    Close
-                                </button>
-                                <button type="submit" class="btn btn-danger">
-                                    Add
-                                </button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{button.close}"></button>
+                                <button type="submit" class="btn btn-danger" th:text="#{button.delete}"></button>
                             </div>
                         </form>
                     </div>
@@ -225,7 +213,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="Label">Edit</h5>
+                            <h5 class="modal-title" id="Label" th:text="#{button.edit}"></h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -234,27 +222,27 @@
                             <div class="modal-body">
                                 <input name="id" type="hidden" th:value="${user.id}">
                                 <div class="mb-3">
-                                    <label for="firstNameEdit" class="form-label text-dark">First name</label>
+                                    <label for="firstNameEdit" class="form-label text-dark" th:text="#{form.first.name}"></label>
                                     <input class="form-control" id="firstNameEdit" name = "firstName" aria-describedby="first name" th:value="${user.firstName}">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="lastNameEdit" class="form-label text-dark">Last name</label>
+                                    <label for="lastNameEdit" class="form-label text-dark" th:text="#{form.last.name}"></label>
                                     <input class="form-control" id="lastNameEdit" name = "lastName" aria-describedby="last name" th:value="${user.lastName}">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="emailEdit" class="form-label text-dark">Email</label>
+                                    <label for="emailEdit" class="form-label text-dark" th:text="#{form.email}"></label>
                                     <input type="email" class="form-control" id="emailEdit" aria-describedby="emailHelp" th:value="${user.email}" disabled>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="birthdayEdit" class="form-label text-dark">Birthday</label>
+                                    <label for="birthdayEdit" class="form-label text-dark" th:text="#{form.birhtday}"></label>
                                     <input class="form-control" type="date" id="birthdayEdit" name="birthday" aria-describedby="birthday" th:value="${user.birthday}">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="phoneEdit" class="form-label text-dark">Phone</label>
+                                    <label for="phoneEdit" class="form-label text-dark" th:text="#{form.phone}"></label>
                                     <input class="form-control" id="phoneEdit" name = "phone" aria-describedby="phone number" th:value="${user.phone}">
                                 </div>
                                 <div class="form-group">
-                                    <label for="roleEdit">ADMIN</label>
+                                    <label for="roleEdit" th:text="${user.role.toString()}"></label>
                                     <select class="form-control" id="roleEdit" name="role">
                                         <option>ADMIN</option>
                                         <option>LIBRARIAN</option>
@@ -263,8 +251,8 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Edit</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{button.close}"></button>
+                                <button type="submit" class="btn btn-primary" th:text="#{button.edit}"></button>
                             </div>
                         </form>
                     </div>
