@@ -191,7 +191,7 @@
                     </form>
                 </div>
         <!-- pagination -->
-        <th:block th:if="${from} != 0">
+        <th:block th:if="${from} != null">
             <div class="d-flex justify-content-start" style="margin-top: 20px">
                 <ul class="pagination">
                     <li th:if="${from} > 0" class="page-item">
