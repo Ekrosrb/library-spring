@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class BookService implements IService<Book, BookDto> {
+public class BookService implements IService {
 
     private final ModelMapper mapper;
     private final BookRepo bookRepo;
@@ -31,7 +31,7 @@ public class BookService implements IService<Book, BookDto> {
     }
 
     public Book add(BookDto bookDto){
-        return bookRepo.save(fromDto(bookDto));
+        return bookRepo.save(mapper.map(bookDto, Book.class));
     }
 
     public void remove(Long id){
@@ -44,7 +44,7 @@ public class BookService implements IService<Book, BookDto> {
         if(old == null){
             return null;
         }
-        Book newBook = fromDto(book);
+        Book newBook = mapper.map(book, Book.class);
         newBook.setId(old.getId());
         return bookRepo.save(newBook);
     }
@@ -52,15 +52,5 @@ public class BookService implements IService<Book, BookDto> {
     public Long count(String search){
         search = "%" + search + "%";
         return bookRepo.count(search);
-    }
-
-    @Override
-    public BookDto toDto(Book book) {
-        return mapper.map(book, BookDto.class);
-    }
-
-    @Override
-    public Book fromDto(BookDto bookDto) {
-        return mapper.map(bookDto, Book.class);
     }
 }

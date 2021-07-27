@@ -1,7 +1,6 @@
 package com.ekros.libraryspring.services;
 
 import com.ekros.libraryspring.dao.OrderRepo;
-import com.ekros.libraryspring.model.dto.OrderDto;
 import com.ekros.libraryspring.model.entity.*;
 import com.ekros.libraryspring.services.interfase.IService;
 import org.modelmapper.ModelMapper;
@@ -14,7 +13,7 @@ import java.sql.Date;
 import java.util.List;
 
 @Service
-public class OrderService implements IService<Order, OrderDto> {
+public class OrderService implements IService {
 
     private final OrderRepo orderRepo;
     private final ModelMapper mapper;
@@ -91,13 +90,4 @@ public class OrderService implements IService<Order, OrderDto> {
         return mapper.map(orderRepo.save(order), OrderInfo.class);
     }
 
-    @Override
-    public OrderDto toDto(Order order) {
-        return mapper.map(order, OrderDto.class);
-    }
-
-    @Override
-    public Order fromDto(OrderDto orderDto) {
-        return mapper.map(orderDto, Order.class);
-    }
 }

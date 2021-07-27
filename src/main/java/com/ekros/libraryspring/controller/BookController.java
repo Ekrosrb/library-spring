@@ -2,9 +2,14 @@ package com.ekros.libraryspring.controller;
 
 import com.ekros.libraryspring.model.dto.BookDto;
 import com.ekros.libraryspring.services.BookService;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/book")
@@ -15,6 +20,14 @@ public class BookController {
     public BookController(BookService bookService) {
         this.bookService = bookService;
     }
+
+    @ExceptionHandler(BindException.class)
+    public String incorrectBookData(BindException ex, RedirectAttributes attributes){
+        attributes.addAttribute("message", "Incorrect book data!");
+        attributes.addAttribute("messageBook", ex.getAllErrors().get(0).getDefaultMessage());
+        return "redirect:/book/list";
+    }
+
 
     @GetMapping("/list")
     public String list(Model model,
@@ -32,15 +45,8 @@ public class BookController {
         return "index";
     }
 
-    @PostMapping("/add")
-    public String add(String name, String author, String edition, String description, String descriptionRu, Integer count){
-        BookDto bookDto = new BookDto();
-        bookDto.setName(name);
-        bookDto.setAuthor(author);
-        bookDto.setEdition(edition);
-        bookDto.setDescription(description);
-        bookDto.setDescriptionRu(descriptionRu);
-        bookDto.setCount(count);
+    @PostMapping(value = "/add", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public String add(@Valid BookDto bookDto){
         bookService.add(bookDto);
         return "redirect:/";
     }
@@ -51,15 +57,8 @@ public class BookController {
         return "redirect:/";
     }
 
-    @PostMapping("/update/{id}")
-    public String update(@PathVariable Long id, String name, String author, String edition, String description, String descriptionRu, Integer count){
-        BookDto bookDto = new BookDto();
-        bookDto.setName(name);
-        bookDto.setAuthor(author);
-        bookDto.setEdition(edition);
-        bookDto.setDescription(description);
-        bookDto.setDescriptionRu(descriptionRu);
-        bookDto.setCount(count);
+    @PostMapping(value = "/update/{id}", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public String update(@PathVariable Long id, @Valid BookDto bookDto){
         bookService.update(id, bookDto);
         return "redirect:/";
     }

@@ -107,6 +107,7 @@
                                                 <label for="phone" class="form-label text-light" th:text="#{form.phone}"></label>
                                                 <input class="form-control" id="phone" name="phone" aria-describedby="phone number">
                                             </div>
+                                            <div class="alert alert-danger" role="alert" th:if="${param.messageSignIn}" th:text="${param.messageSignIn}"></div>
                                             <button type="submit" class="btn btn-outline-primary" th:text="#{signin}"></button>
                                         </form>
                                     </div>
@@ -168,9 +169,10 @@
                                         </div>
                                         <div class="mb-3">
                                             <label for="countAddModal" class="form-label text-dark" th:text="#{form.book.count}"></label>
-                                            <input class="form-control border border-dark rounded" type="text" id="countAddModal" name="count"/>
+                                            <input class="form-control border border-dark rounded" type="number" id="countAddModal" name="count" value="0"/>
                                         </div>
                                     </div>
+                                    <div class="alert alert-danger" role="alert" th:if="${param.messageBook}" th:text="${param.messageBook}"></div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{button.close}"></button>
                                         <button type="submit" class="btn btn-primary" th:text="#{button.add}"></button>
@@ -190,9 +192,7 @@
     </div>
 </nav>
 
-<div class="alert alert-danger" role="alert" th:if="${param.message}">
-    <div th:text="${param.message}"></div>
-</div>
+<div class="alert alert-danger" role="alert" th:if="${param.message}" th:text="${param.message}"></div>
 <div class="d-flex justify-content-center" style="margin-top: 20px">
     <ul class="pagination">
         <li th:if="${from} > 0" class="page-item">
@@ -317,6 +317,7 @@
                                             <textarea class="form-control" id="descriptionRu" name="descriptionRu" rows="5" th:text="${book.descriptionRu}"></textarea>
                                         </div>
                                     </div>
+                                    <div class="alert alert-danger" role="alert" th:if="${param.messageBook}" th:text="${param.messageBook}"></div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{button.close}"></button>
                                         <button type="submit" class="btn btn-primary" th:text="#{button.edit}"></button>
@@ -339,7 +340,7 @@
                                 <div class="modal-body" th:text="#{button.delete}"></div>
                                 <form method="post" th:action="@{/book/delete/} + ${book.id}">
                                     <input type="hidden" name="id" th:value="${book.id}"/>
-<!--                                    <input type="hidden" name="search" th:value="${search}"/>-->
+<!
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{button.close}"></button>
                                         <button type="submit" class="btn btn-danger" th:text="#{button.delete}"></button>

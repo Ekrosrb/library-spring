@@ -2,6 +2,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 TRUNCATE TABLE users;
 TRUNCATE TABLE books;
 TRUNCATE TABLE orders;
+TRUNCATE TABLE hibernate_sequence;
 SET FOREIGN_KEY_CHECKS = 1;
 
 # INSERT INTO users(first_name, last_name, email, password, birthday, phone, role, block)

@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class UserService implements IService<User, UserDto> {
+public class UserService implements IService {
 
     private final ModelMapper mapper;
     private final PasswordEncoder encoder;
@@ -30,7 +30,7 @@ public class UserService implements IService<User, UserDto> {
     }
 
     public User signIn(UserDto userDto){
-        User user = fromDto(userDto);
+        User user = mapper.map(userDto, User.class);
         user.setRole(Role.USER);
         user.setBlock(false);
         user.setPassword(encoder.encode(userDto.getPassword()));
@@ -78,9 +78,5 @@ public class UserService implements IService<User, UserDto> {
 
     public UserDto toDto(User user){
         return mapper.map(user, UserDto.class);
-    }
-
-    public User fromDto(UserDto userDto){
-       return mapper.map(userDto, User.class);
     }
 }
