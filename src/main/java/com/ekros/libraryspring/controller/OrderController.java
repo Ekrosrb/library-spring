@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.sql.Date;
+import java.util.Locale;
 
 @Controller
 @RequestMapping("/order")
@@ -45,8 +46,8 @@ public class OrderController {
     }
 
     @PostMapping("/add")
-    public String create(Long bookId, Date term){
-        return "redirect:/order/" + orderService.create(bookId, userId(), term).getId();
+    public String create(Long bookId, Date term, Locale locale){
+        return "redirect:/order/" + orderService.create(bookId, userId(), term, locale).getId();
     }
 
     @PostMapping("/pay")

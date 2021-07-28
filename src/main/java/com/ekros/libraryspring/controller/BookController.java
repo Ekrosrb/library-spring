@@ -2,6 +2,7 @@ package com.ekros.libraryspring.controller;
 
 import com.ekros.libraryspring.model.dto.BookDto;
 import com.ekros.libraryspring.services.BookService;
+import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.Locale;
 
 @Controller
 @RequestMapping("/book")
@@ -17,13 +19,17 @@ public class BookController {
 
     private final BookService bookService;
 
-    public BookController(BookService bookService) {
+    private final MessageSource messageSource;
+
+    public BookController(BookService bookService, MessageSource messageSource) {
         this.bookService = bookService;
+        this.messageSource = messageSource;
     }
 
     @ExceptionHandler(BindException.class)
-    public String incorrectBookData(BindException ex, RedirectAttributes attributes){
-        attributes.addAttribute("message", "Incorrect book data!");
+    public String incorrectBookData(BindException ex, RedirectAttributes attributes, Locale locale){
+        attributes.addAttribute("message",
+                messageSource.getMessage("error.message.invalid.param", null, locale));
         attributes.addAttribute("messageBook", ex.getAllErrors().get(0).getDefaultMessage());
         return "redirect:/book/list";
     }

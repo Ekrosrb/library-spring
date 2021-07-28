@@ -7,14 +7,14 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 public class BookDto {
-    @NotBlank(message = "Book name is empty!")
+    @NotBlank(message = "{form.message.empty.book.name}")
     private String name;
-    @NotBlank(message = "Indicate the author!")
+    @NotBlank(message = "{form.message.empty.book.author}")
     private String author;
-    @NotBlank(message = "Indicate the edition!")
+    @NotBlank(message = "{form.message.empty.edition}")
     private String edition;
     private String description;
     private String descriptionRu;
-    @Min(value = 0, message = "Must be >= 0")
+    @Min(value = 0, message = "{form.message.invalid.count}")
     private int count;
 }

@@ -5,6 +5,7 @@ import com.ekros.libraryspring.exceptions.OrderException;
 import com.ekros.libraryspring.model.entity.*;
 import com.ekros.libraryspring.services.interfase.IService;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.MessageSource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 public class OrderService implements IService {
@@ -19,9 +21,12 @@ public class OrderService implements IService {
     private final OrderRepo orderRepo;
     private final ModelMapper mapper;
 
-    public OrderService(OrderRepo orderRepo, ModelMapper mapper) {
+    private final MessageSource messageSource;
+
+    public OrderService(OrderRepo orderRepo, ModelMapper mapper, MessageSource messageSource) {
         this.orderRepo = orderRepo;
         this.mapper = mapper;
+        this.messageSource = messageSource;
     }
 
     public Order order(Long id){
@@ -50,9 +55,11 @@ public class OrderService implements IService {
         return orderRepo.count(status.ordinal());
     }
 
-    public Order create(Long bookId, Long userId, Date term) {
+    public Order create(Long bookId, Long userId, Date term, Locale locale) {
         if(orderRepo.checkUserActiveOrders(userId, bookId) > 0){
-            throw new OrderException("You already have an active order for this book.");
+            throw new OrderException(
+                    messageSource.getMessage("error.message.duplicate.order", null, locale)
+            );
         }
         Order order = new Order();
         order.setBook(new Book());

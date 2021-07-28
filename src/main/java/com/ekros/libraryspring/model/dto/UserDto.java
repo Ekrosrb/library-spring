@@ -7,17 +7,17 @@ import java.sql.Date;
 
 @Data
 public class UserDto {
-    @NotBlank(message = "Enter your name!")
+    @NotBlank(message = "{form.message.empty.name}")
     private String firstName;
-    @NotBlank(message = "Enter your lastname!")
+    @NotBlank(message = "{form.message.empty.last.name}")
     private String lastName;
-    @Email(message = "Email is incorrect!")
-    @NotBlank(message = "Email is empty!")
+    @Email(message = "{form.message.invalid.email}")
+    @NotBlank(message = "{form.message.empty.email}")
     private String email;
-    @Min(value = 5, message = "Password length must be > 5")
+    @Size(min = 5, message = "{form.message.invalid.password}")
     private String password;
-    @NotNull(message = "Incorrect birthday date!")
+    @NotNull(message = "{form.message.invalid.birthday}")
     private Date birthday;
-    @Min(value = 8, message = "Incorrect length!")
+    @Size(min = 8, max = 12, message = "{form.message.invalid.phone}")
     private String phone;
 }
