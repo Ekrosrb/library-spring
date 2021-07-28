@@ -1,13 +1,12 @@
 package com.ekros.libraryspring.controller;
 
+import com.ekros.libraryspring.exceptions.OrderException;
 import com.ekros.libraryspring.model.entity.Status;
 import com.ekros.libraryspring.services.OrderService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/librarian")
@@ -19,6 +18,11 @@ public class LibrarianController {
         this.orderService = orderService;
     }
 
+    @ExceptionHandler(OrderException.class)
+    public String orderException(OrderException ex, RedirectAttributes attributes){
+        attributes.addAttribute("message", ex.getMessage());
+        return "redirect:/librarian";
+    }
 
     @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST})
     public String librarian(Model model, @RequestParam(required = false) String type, @RequestParam(required = false) Integer from){

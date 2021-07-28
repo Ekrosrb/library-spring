@@ -1,6 +1,7 @@
 package com.ekros.libraryspring.services;
 
 import com.ekros.libraryspring.dao.OrderRepo;
+import com.ekros.libraryspring.exceptions.OrderException;
 import com.ekros.libraryspring.model.entity.*;
 import com.ekros.libraryspring.services.interfase.IService;
 import org.modelmapper.ModelMapper;
@@ -50,6 +51,9 @@ public class OrderService implements IService {
     }
 
     public Order create(Long bookId, Long userId, Date term) {
+        if(orderRepo.checkUserActiveOrders(userId, bookId) > 0){
+            throw new OrderException("You already have an active order for this book.");
+        }
         Order order = new Order();
         order.setBook(new Book());
         order.setUser(new User());
@@ -65,7 +69,11 @@ public class OrderService implements IService {
     @Transactional
     public OrderInfo changeStatus(Long id, Status status){
         Order order = orderRepo.findById(id).get();
-        if(status == Status.ON_USE){
+
+        if(status == Status.ACCEPTED){
+            if(order.getBook().getCount() == 0){
+                throw new OrderException("Book '" + order.getBook().getName() + "' out of stock");
+            }
             order.getBook().setCount(order.getBook().getCount()-1);
         }else if(status == Status.CLOSED){
             order.getBook().setCount(order.getBook().getCount()+1);
