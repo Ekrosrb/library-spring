@@ -11,15 +11,12 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class AuthControllerTest {
+class AuthControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -31,7 +28,7 @@ public class AuthControllerTest {
     private UserRepo userRepo;
 
     @Test
-    public void signInValidTest() throws Exception{
+    void signInValidTest() throws Exception{
         mockMvc.perform(post("/auth/signin")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .param("firstName", "Test")
@@ -48,7 +45,7 @@ public class AuthControllerTest {
     }
 
     @Test
-    public void signInInvalidNameTest() throws Exception{
+    void signInInvalidNameTest() throws Exception{
         mockMvc.perform(post("/auth/signin")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("firstName", "")
@@ -61,7 +58,7 @@ public class AuthControllerTest {
     }
 
     @Test
-    public void signInInvalidLastNameTest() throws Exception{
+    void signInInvalidLastNameTest() throws Exception{
         mockMvc.perform(post("/auth/signin")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .param("firstName", "Test")
@@ -74,7 +71,7 @@ public class AuthControllerTest {
     }
 
     @Test
-    public void signInInvalidEmailTest() throws Exception{
+    void signInInvalidEmailTest() throws Exception{
         mockMvc.perform(post("/auth/signin")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .param("firstName", "Test")
@@ -87,7 +84,7 @@ public class AuthControllerTest {
     }
 
     @Test
-    public void signInInvalidPhoneTest() throws Exception{
+    void signInInvalidPhoneTest() throws Exception{
         mockMvc.perform(post("/auth/signin")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .param("firstName", "Test")
