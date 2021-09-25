@@ -1,8 +1,10 @@
 package com.ekros.libraryspring.services;
 
+import com.ekros.libraryspring.dao.TokenRepo;
 import com.ekros.libraryspring.dao.UserRepo;
 import com.ekros.libraryspring.model.dto.UserDto;
 import com.ekros.libraryspring.model.entity.Role;
+import com.ekros.libraryspring.model.entity.Token;
 import com.ekros.libraryspring.model.entity.User;
 import com.ekros.libraryspring.services.interfase.IService;
 import org.modelmapper.ModelMapper;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class UserService implements IService {
@@ -21,12 +24,18 @@ public class UserService implements IService {
     private final ModelMapper mapper;
     private final PasswordEncoder encoder;
 
-    private final UserRepo userRepo;
+    private final EmailService emailService;
 
-    public UserService(ModelMapper mapper, PasswordEncoder encoder, UserRepo userRepo) {
+    private final UserRepo userRepo;
+    private final TokenRepo tokenRepo;
+
+    public UserService(ModelMapper mapper, PasswordEncoder encoder, EmailService emailService,
+                       UserRepo userRepo, TokenRepo tokenRepo) {
         this.mapper = mapper;
         this.encoder = encoder;
+        this.emailService = emailService;
         this.userRepo = userRepo;
+        this.tokenRepo = tokenRepo;
     }
 
     public User signIn(UserDto userDto){
@@ -35,6 +44,24 @@ public class UserService implements IService {
         user.setBlock(false);
         user.setPassword(encoder.encode(userDto.getPassword()));
 
+        user = userRepo.save(user);
+        user.setToken(Token.create(UUID.randomUUID().toString(), user));
+        user = userRepo.save(user);
+
+        emailService.sendActivationCode(user.getEmail(), user.getToken().getUuid());
+
+        return user;
+    }
+
+    public User activate(String tokenId){
+        Token token = tokenRepo.findByUuid(tokenId).orElse(null);
+        if(token == null){
+            return null;
+        }
+        User user = token.getUser();
+        user.setEnable(true);
+        user.setToken(null);
+        tokenRepo.delete(token);
         return userRepo.save(user);
     }
 

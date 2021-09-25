@@ -46,13 +46,25 @@ public class AuthController {
         return "redirect:/book/list";
     }
 
-
     @PostMapping(value = "/signin",
             consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public String signin(@Valid UserDto userDto){
+    public String signin(@Valid UserDto userDto, RedirectAttributes redirectAttributes, Locale locale){
         userService.signIn(userDto);
-        return "redirect:/";
+        redirectAttributes.addAttribute("message",
+                messageSource.getMessage("info.message.activate.account", null, locale));
+        return "redirect:/book/list";
+    }
+    @GetMapping(value = "/activate/{id}")
+    public String activate(@PathVariable String id, RedirectAttributes redirectAttributes, Locale locale){
+        if(userService.activate(id) != null) {
+            redirectAttributes.addAttribute("message",
+                    messageSource.getMessage("info.message.activation.complete", null, locale));
+            return "redirect:/book/list";
+        }
+        redirectAttributes.addAttribute("message",
+                messageSource.getMessage("error.message.id.not.exists", null, locale));
+        return "redirect:/book/list";
     }
 
 }

@@ -14,6 +14,7 @@ public class LibraryUserDetails implements UserDetails {
     private final String password;
     private final Role role;
     private final Boolean block;
+    private final Boolean isEnabled;
 
     public LibraryUserDetails(User user) {
         this.email = user.getEmail();
@@ -21,6 +22,7 @@ public class LibraryUserDetails implements UserDetails {
         this.role = user.getRole();
         this.id = user.getId();
         this.block = user.isBlock();
+        this.isEnabled = user.isEnable();
     }
 
     @Override
@@ -59,6 +61,6 @@ public class LibraryUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return isEnabled;
     }
 }

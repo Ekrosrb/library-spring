@@ -1,11 +1,10 @@
 package com.ekros.libraryspring.controller;
 
 import com.ekros.libraryspring.exceptions.OrderException;
-import com.ekros.libraryspring.model.entity.LibraryUserDetails;
 import com.ekros.libraryspring.model.entity.User;
 import com.ekros.libraryspring.services.OrderService;
 import com.ekros.libraryspring.services.UserService;
-import org.springframework.security.core.context.SecurityContextHolder;
+import com.ekros.libraryspring.utils.ContextUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -47,7 +46,7 @@ public class OrderController {
 
     @PostMapping("/add")
     public String create(Long bookId, Date term, Locale locale){
-        return "redirect:/order/" + orderService.create(bookId, userId(), term, locale).getId();
+        return "redirect:/order/" + orderService.create(bookId, ContextUtils.getPrincipal().getId(), term, locale).getId();
     }
 
     @PostMapping("/pay")
@@ -62,14 +61,10 @@ public class OrderController {
         if(from == null){
             from = 0;
         }
-        User user = userService.getUser(userId());
+        User user = userService.getUser(ContextUtils.getPrincipal().getId());
         model.addAttribute("user", userService.toDto(user));
         model.addAttribute("orderList", orderService.userList(from, user.getId()));
         model.addAttribute("from", from);
         model.addAttribute("count", user.getOrders().size());
-    }
-
-    private Long userId(){
-        return ((LibraryUserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
     }
 }
