@@ -33,9 +33,13 @@ public class User {
     private Role role;
     @Column(nullable = false)
     private boolean block;
-
+    @Column(nullable = false, columnDefinition = "boolean default false")
+    private boolean enable;
     @OneToMany(mappedBy = "user")
     private Set<Order> orders;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private Token token;
 
     public String getFullName(){
         return firstName + " " + lastName;
