@@ -18,6 +18,8 @@ public class UserDto {
     private String password;
     @NotNull(message = "{form.message.invalid.birthday}")
     private Date birthday;
+    @NotNull(message = "{form.message.invalid.country}")
+    private String country;
     @Size(min = 8, max = 12, message = "{form.message.invalid.phone}")
     private String phone;
 }

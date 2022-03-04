@@ -100,6 +100,11 @@
                                             </script>
 
                                             <div class="mb-3">
+                                                <label for="country" class="form-label text-light" th:text="#{form.country}"></label>
+                                                <input class="form-control" id="country" name = "country" aria-describedby="country">
+                                            </div>
+
+                                            <div class="mb-3">
                                                 <label for="birthday" class="form-label text-light" th:text="#{form.birhtday}"></label>
                                                 <input class="form-control" type="date" value="2000-01-01" id="birthday" name="birthday" aria-describedby="birthday">
                                             </div>
@@ -158,6 +163,14 @@
                                         <div class="mb-3">
                                             <label for="editionAddModal" class="form-label text-dark" th:text="#{form.book.edition}"></label>
                                             <input class="form-control border border-dark rounded" type="text" id="editionAddModal" name="edition"/>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="yearAddModal" class="form-label text-dark" th:text="#{form.book.year}"></label>
+                                            <input class="form-control border border-dark rounded" type="text" id="yearAddModal" name="year"/>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="genresAddModal" class="form-label text-dark" th:text="#{form.book.genres}"></label>
+                                            <input class="form-control border border-dark rounded" type="text" id="genresAddModal" name="genres"/>
                                         </div>
                                         <div class="mb-3">
                                             <label for="descriptionAddModal" class="form-label text-dark" th:text="#{form.book.description}"></label>

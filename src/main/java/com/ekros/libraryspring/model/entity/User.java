@@ -27,6 +27,8 @@ public class User {
     private String password;
     @Column(nullable = false)
     private Date birthday;
+    @Column(length = 100, nullable = false)
+    private String country;
     @Column(length = 15, nullable = false)
     private String phone;
     @Column(nullable = false)

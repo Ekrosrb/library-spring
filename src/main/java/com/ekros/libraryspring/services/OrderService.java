@@ -21,11 +21,15 @@ public class OrderService implements IService {
     private final OrderRepo orderRepo;
     private final ModelMapper mapper;
 
+    private final EventService eventService;
+
     private final MessageSource messageSource;
 
-    public OrderService(OrderRepo orderRepo, ModelMapper mapper, MessageSource messageSource) {
+    public OrderService(OrderRepo orderRepo, ModelMapper mapper,
+        EventService eventService, MessageSource messageSource) {
         this.orderRepo = orderRepo;
         this.mapper = mapper;
+        this.eventService = eventService;
         this.messageSource = messageSource;
     }
 
@@ -82,6 +86,7 @@ public class OrderService implements IService {
                 throw new OrderException("Book '" + order.getBook().getName() + "' out of stock");
             }
             order.getBook().setCount(order.getBook().getCount()-1);
+            eventService.sendEventAnalyticsData(order);
         }else if(status == Status.CLOSED){
             order.getBook().setCount(order.getBook().getCount()+1);
         }

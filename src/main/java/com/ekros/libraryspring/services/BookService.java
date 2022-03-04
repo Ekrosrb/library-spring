@@ -4,6 +4,7 @@ import com.ekros.libraryspring.dao.BookRepo;
 import com.ekros.libraryspring.model.dto.BookDto;
 import com.ekros.libraryspring.model.entity.Book;
 import com.ekros.libraryspring.services.interfase.IService;
+import java.util.Optional;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +31,11 @@ public class BookService implements IService {
         return bookRepo.findByNameContainingOrAuthorContaining(search, search, pageable);
     }
 
+    public Book getBookById(long id){
+        Optional<Book> book = bookRepo.findById(id);
+        return book.orElse(null);
+    }
+
     public Book add(BookDto bookDto){
         return bookRepo.save(mapper.map(bookDto, Book.class));
     }
@@ -47,6 +53,10 @@ public class BookService implements IService {
         Book newBook = mapper.map(book, Book.class);
         newBook.setId(old.getId());
         return bookRepo.save(newBook);
+    }
+
+    public Long count(){
+        return bookRepo.count();
     }
 
     public Long count(String search){

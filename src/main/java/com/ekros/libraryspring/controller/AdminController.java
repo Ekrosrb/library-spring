@@ -1,8 +1,8 @@
 package com.ekros.libraryspring.controller;
 
-import com.ekros.libraryspring.model.dto.UserDto;
 import com.ekros.libraryspring.model.entity.Role;
 import com.ekros.libraryspring.model.entity.User;
+import com.ekros.libraryspring.services.EventGeneratorService;
 import com.ekros.libraryspring.services.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,8 +16,17 @@ public class AdminController {
 
     private final UserService userService;
 
-    public AdminController(UserService userService) {
+    private final EventGeneratorService eventGeneratorService;
+
+    public AdminController(UserService userService, EventGeneratorService eventGeneratorService) {
         this.userService = userService;
+        this.eventGeneratorService = eventGeneratorService;
+    }
+
+    @GetMapping("/test/generate/{size}")
+    public String generateEvents(@PathVariable Integer size){
+        eventGeneratorService.generateEvents(size);
+        return "redirect:/admin";
     }
 
     @RequestMapping(method = {RequestMethod.POST, RequestMethod.GET})
