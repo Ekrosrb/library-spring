@@ -10,7 +10,7 @@ public class PropertiesConfig {
 
   @Bean
   @ConfigurationProperties(prefix = "event.service")
-  public EventProperties eventProperties(){
+  public EventProperties eventProperties() {
     return new EventProperties();
   }
 }

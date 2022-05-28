@@ -28,6 +28,8 @@ import org.springframework.stereotype.Service;
 @Log4j
 public class EventService {
 
+  public static final String ORDER_MESSAGE_TYPE = "library-order-info";
+
   private final EventProperties eventProperties;
 
   private final ObjectMapper mapper = new ObjectMapper();
@@ -37,9 +39,10 @@ public class EventService {
   }
 
   @SneakyThrows
-  public void sendEventAnalyticsData(EventMessage eventMessage){
+  public void sendEventAnalyticsData(EventMessage eventMessage) {
     HttpResponse<String> response = sendHttpRequest(mapper.writeValueAsString(eventMessage));
-    log.info("EventData response status: " + response.statusCode() + " EventId: " + response.body());
+    log.info(
+        "EventData response status: " + response.statusCode() + " EventId: " + response.body());
 
   }
 
@@ -77,7 +80,7 @@ public class EventService {
 
     EventData eventData = EventData.builder().book(bookData).user(userData).build();
 
-    return EventMessage.builder().transactionId(UUID.randomUUID().toString())
+    return EventMessage.builder().id(ORDER_MESSAGE_TYPE).transactionId(UUID.randomUUID().toString())
         .time(Instant.now().toString()).data(eventData).build();
   }
 }

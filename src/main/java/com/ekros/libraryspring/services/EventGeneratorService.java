@@ -22,7 +22,7 @@ public class EventGeneratorService {
       .collect(Collectors.toList());
 
   private static final List<String> COUNTRIES = List.of("USA", "Canada", "UK", "Germany", "France",
-      "Italian", "Russia", "Ukraine", "Sweden");
+      "Italian", "Ukraine", "Sweden");
 
   private final long COUNT;
 
@@ -35,6 +35,7 @@ public class EventGeneratorService {
     this.eventService = eventService;
     COUNT = bookService.count();
   }
+
 
   public void generateEvents(int size) {
     List<EventMessage> events = Stream.iterate(0, x -> x + 1).limit(size)
@@ -56,8 +57,9 @@ public class EventGeneratorService {
 
     EventData eventData = EventData.builder().book(bookData).user(userData).build();
 
-    return EventMessage.builder().transactionId(UUID.randomUUID().toString()).time(
-        Instant.now().toString()).data(eventData).build();
+    return EventMessage.builder().id(EventService.ORDER_MESSAGE_TYPE)
+        .transactionId(UUID.randomUUID().toString()).time(
+            Instant.now().toString()).data(eventData).build();
 
   }
 

@@ -9,10 +9,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 @EnableScheduling
 @ConfigurationPropertiesScan
-public class LibraryspringApplication {
+public class LibrarySpringApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(LibraryspringApplication.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(LibrarySpringApplication.class, args);
+  }
 
 }
