@@ -58,8 +58,7 @@ public class EventGeneratorService {
     EventData eventData = EventData.builder().book(bookData).user(userData).build();
 
     return EventMessage.builder().id(EventService.ORDER_MESSAGE_TYPE)
-        .transactionId(UUID.randomUUID().toString()).time(
-            Instant.now().toString()).data(eventData).build();
+        .transactionId(UUID.randomUUID().toString()).data(eventData).build();
 
   }
 

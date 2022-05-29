@@ -9,7 +9,6 @@ public class EventMessage {
 
   private String id;
   private String transactionId;
-  private String time;
   private EventData data;
 
 }
