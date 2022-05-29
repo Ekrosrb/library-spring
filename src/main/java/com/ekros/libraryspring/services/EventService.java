@@ -13,7 +13,6 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Arrays;
@@ -59,6 +58,7 @@ public class EventService {
 
     HttpRequest request = HttpRequest.newBuilder(uri)
         .header("Content-Type", "application/json")
+        .header("Authorization", eventProperties.getAuth())
         .POST(HttpRequest.BodyPublishers.ofString(data))
         .build();
     return client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -81,6 +81,6 @@ public class EventService {
     EventData eventData = EventData.builder().book(bookData).user(userData).build();
 
     return EventMessage.builder().id(ORDER_MESSAGE_TYPE).transactionId(UUID.randomUUID().toString())
-        .time(Instant.now().toString()).data(eventData).build();
+        .data(eventData).build();
   }
 }

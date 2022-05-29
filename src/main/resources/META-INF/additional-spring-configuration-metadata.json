@@ -9,5 +9,10 @@
       "name": "event.service.path",
       "type": "java.lang.String",
       "description": "Description for event.service.path."
+    },
+    {
+      "name": "event.service.auth",
+      "type": "java.lang.String",
+      "description": "Description for event.service.auth."
     }
   ] }

@@ -7,5 +7,6 @@ public class EventProperties {
 
   private String host;
   private String path;
+  private String auth;
 
 }
